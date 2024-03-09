@@ -3,7 +3,7 @@
     <Navbar/>
     <section class="d-flex vh-100">
       <Sidebar/>
-      <div class="flex-1 p-3">
+      <div class="flex-1 p-4">
         <div>ei</div>
       </div>
     </section>
