@@ -36,11 +36,11 @@
           required
         />
       </div>
-      <button type="submit" class="btn btn-primary w-100 h-10">Register</button>
-      <div class="d-flex align-items-center gap-2 mt-3">
-        <span style="color: #373a3c">Already Registered?</span>
+      <ButtonFormVue text="Register" />
+      <div class="d-flex align-items-center gap-2 mt-3" style="color: #373a3c">
+        <span class="mr-2">Already Registered?</span>
         <router-link to="/login">
-          <span style="color: #373a3c" class="font-weight-bolder">Login</span>
+          <span style="color: #373a3c" class="font-weight-bold">Login</span>
         </router-link>
       </div>
     </form>
@@ -49,6 +49,7 @@
 
 <script>
 import { registerUser } from "../../services/authServices";
+import ButtonFormVue from "../../components/ButtonForm.vue";
 
 export default {
   data() {
@@ -74,6 +75,9 @@ export default {
         this.notifyErr = true;
       }
     },
+  },
+  components: {
+    ButtonFormVue,
   },
 };
 </script>

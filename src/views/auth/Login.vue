@@ -15,7 +15,9 @@
         />
       </div>
       <div class="form-group text-left my-4">
-        <label for="password" style="color: #373a3c" class="mb-1">Password:</label>
+        <label for="password" style="color: #373a3c" class="mb-1"
+          >Password:</label
+        >
         <input
           type="password"
           id="password"
@@ -24,11 +26,13 @@
           required
         />
       </div>
-      <button type="submit" class="btn btn-primary w-100 h-10">Login</button>
-      <div class="d-flex align-items-center gap-2 mt-3">
-        <span style="color: #373a3c">Don’t have account?</span>
+      <ButtonFormVue text="Login"/>
+      <div class="d-flex align-items-center mt-3" style="color: #373a3c">
+        <span class="mr-2">Don’t have account?</span>
         <router-link to="/register">
-            <span style="color: #373a3c" class="font-weight-bolder">Register Now</span>
+          <span style="color: #373a3c" class="font-weight-bold"
+            >Register Now</span
+          >
         </router-link>
       </div>
     </form>
@@ -36,8 +40,8 @@
 </template>
 
 <script>
+import ButtonFormVue from "../../components/ButtonForm.vue";
 import { loginUser } from "../../services/authServices";
-import { toast } from "vue3-toastify";
 
 export default {
   data() {
@@ -55,19 +59,15 @@ export default {
           user: this.user,
         });
         localStorage.setItem("accessToken", data?.user?.token);
-        toast.success("Login Successful", {
-          autoClose: "3000",
-          rtl: true,
-        });
+
         console.log(data);
       } catch (error) {
         console.log(error);
-        toast.error("Email or password is invalid", {
-          autoClose: "3000",
-          rtl: true,
-        });
       }
     },
+  },
+  components: {
+    ButtonFormVue,
   },
 };
 </script>
