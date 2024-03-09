@@ -71,6 +71,7 @@ export default {
         });
         this.notifySuccess = true;
         localStorage.setItem("accessToken", data?.user?.token);
+        this.$router.push('/');
       } catch (error) {
         this.notifyErr = true;
       }

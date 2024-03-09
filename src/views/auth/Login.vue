@@ -26,7 +26,7 @@
           required
         />
       </div>
-      <ButtonFormVue text="Login"/>
+      <ButtonFormVue text="Login" />
       <div class="d-flex align-items-center mt-3" style="color: #373a3c">
         <span class="mr-2">Don’t have account?</span>
         <router-link to="/register">
@@ -59,8 +59,7 @@ export default {
           user: this.user,
         });
         localStorage.setItem("accessToken", data?.user?.token);
-
-        console.log(data);
+        this.$router.push("/");
       } catch (error) {
         console.log(error);
       }
