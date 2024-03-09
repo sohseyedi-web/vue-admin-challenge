@@ -1,10 +1,10 @@
 import http from "./http";
 
-export function registerUser(data) {
-  return http.post("/users", data).then((res) => res.data);
+export function registerUser({ user }) {
+  return http.post("/users", { user }).then((res) => res.data);
 }
-export function loginUser(data) {
-  return http.post("/users/login", data).then((res) => res.data);
+export function loginUser({ user }) {
+  return http.post("/users/login", { user }).then((res) => res.data);
 }
 export function getCurrentUser(token) {
   return http

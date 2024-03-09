@@ -1,10 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = import.meta.env.APIURL;
-
 const app = axios.create({
-  baseURL: BASE_URL,
-  withCredentials: true,
+  baseURL: import.meta.env.VITE_APIURL,
 });
 
 const http = {
