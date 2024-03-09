@@ -26,6 +26,7 @@
 
 <script>
 import { loginUser } from "../../services/authServices";
+import { toast } from "vue3-toastify";
 
 export default {
   data() {
@@ -39,12 +40,21 @@ export default {
   methods: {
     async submitForm() {
       try {
-        await loginUser({
+        const data = await loginUser({
           user: this.user,
         });
-        console.log("Login successful");
+        localStorage.setItem("accessToken", data?.user?.token);
+        toast.success("Login Successful", {
+          autoClose: "3000",
+          rtl: true,
+        });
+        console.log(data);
       } catch (error) {
-        console.error("Login failed", error);
+        console.log(error);
+        toast.error("Email or password is invalid", {
+          autoClose: "3000",
+          rtl: true,
+        });
       }
     },
   },

@@ -50,12 +50,21 @@ export default {
   methods: {
     async submitForm() {
       try {
-        await registerUser({
+        const data = await registerUser({
           user: this.user,
         });
-        console.log("Register successful");
+        localStorage.setItem("accessToken", data?.user?.token);
+        toast.success("Register Successful", {
+          autoClose: "3000",
+          rtl: true,
+        });
+        console.log(data);
       } catch (error) {
-        console.error("Regsiter failed", error);
+        console.log(error);
+        toast.error("error in register", {
+          autoClose: "3000",
+          rtl: true,
+        });
       }
     },
   },

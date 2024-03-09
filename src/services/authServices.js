@@ -6,12 +6,6 @@ export function registerUser({ user }) {
 export function loginUser({ user }) {
   return http.post("/users/login", { user }).then((res) => res.data);
 }
-export function getCurrentUser(token) {
-  return http
-    .get("/user", {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    })
-    .then((res) => res.data);
+export function getCurrentUser() {
+  return http.get("/user").then((res) => res.data);
 }
