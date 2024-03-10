@@ -36,27 +36,29 @@
           style="height: 207px; resize: none"
         />
       </div>
+      <!-- show modal -->
+      <div
+        class="w-100 form-control d-lg-none pointer my-3"
+        data-toggle="modal"
+        data-target="#exampleModalCenter"
+        style="cursor: pointer;"
+      >
+        Tags
+      </div>
+      <Modal />
+      <!-- end modal -->
       <button type="submit" class="customBtn py-2 text-white">Submit</button>
     </div>
-    <div class="col-6 col-md-3 pt-2">
-      <h6>Tags</h6>
-      <div class="form-group text-left mb-3 mt-2">
-        <input
-          type="text"
-          id="title"
-          class="form-control"
-          required
-          placeholder="New tag"
-        />
-      </div>
-      <div class="customBoxTags">s</div>
+    <div class="col-6 col-md-3 pt-2 d-none d-lg-block">
+      <Tags />
     </div>
   </form>
 </template>
 <script>
-import ButtonForm from "./ButtonForm.vue";
+import Tags from "./Tags.vue";
+import Modal from "./Modal.vue";
 export default {
-  components: { ButtonForm },
+  components: { Tags, Modal },
   props: ["text"],
 };
 </script>
@@ -65,14 +67,7 @@ export default {
   font-size: 2.5rem;
   color: #000;
 }
-.customBoxTags {
-  height: 355px;
-  padding: 1rem 1.05rem;
-  margin: 1rem 0;
-  border-radius: 4px;
-  border: solid 1px #ddd;
-  background-color: #fff;
-}
+
 .customBtn {
   width: 99px;
   border-radius: 4px;
