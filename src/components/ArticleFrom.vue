@@ -45,7 +45,9 @@
       >
         Tags
       </div>
-      <Modal />
+      <Modal>
+        <Tags/>
+      </Modal>
       <!-- end modal -->
       <button type="submit" class="customBtn py-2 text-white">Submit</button>
     </div>

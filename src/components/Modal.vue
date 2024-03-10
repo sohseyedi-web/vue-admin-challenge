@@ -21,15 +21,13 @@
           </button>
         </div>
         <div class="modal-body">
-          <Tags />
+          <slot></slot>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import Tags from "./Tags.vue";
 export default {
-  components: { Tags },
 };
 </script>
