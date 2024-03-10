@@ -1,8 +1,11 @@
 <template>
   <header class="customNavbar">
     <div class="d-flex align-items-center">
-      <h1 class="mr-3 mb-0" style="font-size: 1.375rem;">Arvan Challenge</h1>
-      <span>Welcome {{ username }}</span>
+      <h1 class="mr-3 mb-0" style="font-size: 1.375rem">Arvan Challenge</h1>
+      <div>
+        <span v-if="username">Welcome {{ username }}</span>
+        <span v-else>soheil</span>
+      </div>
     </div>
     <button class="customButton">Logout</button>
   </header>
@@ -41,7 +44,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color :#fff;
+  color: #fff;
   position: sticky;
 }
 .customButton {
