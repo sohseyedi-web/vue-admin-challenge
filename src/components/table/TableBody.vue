@@ -7,11 +7,12 @@
   <td class="col-2 d-flex">
     <span class="mr-2">{{ toLocalDateString(article?.createdAt) }}</span>
     <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         ...
       </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a  class="dropdown-item text-left" href="#">Something else here</a>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
+        <button class="dropdown-item" type="button">Edit</button>
+        <div class="dropdown-divider"></div>
       </div>
     </div>
   </td>
@@ -21,17 +22,19 @@
 <script>
   import {truncateText} from '../../utils/truncateText';
   import {toLocalDate} from '../../utils/toLocalDate';
+import Modal from '../Modal.vue';
+import Tags from '../Tags.vue';
 export default{
-  
-  props:['index','article'],
-  methods: {
-    truncateTextBody(value){
-        return truncateText(value)
-      },
-      toLocalDateString(value){
-        return toLocalDate(value)
-      },
-  },
+    props: ['index', 'article'],
+    methods: {
+        truncateTextBody(value) {
+            return truncateText(value);
+        },
+        toLocalDateString(value) {
+            return toLocalDate(value);
+        },
+    },
+    components: { Modal, Tags }
 }
 </script>
 <style>

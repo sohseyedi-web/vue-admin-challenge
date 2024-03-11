@@ -52,7 +52,6 @@
     align-items: center;
     justify-content: space-between;
     color: #fff;
-    position: relative;
     
   }
   .customIcon{

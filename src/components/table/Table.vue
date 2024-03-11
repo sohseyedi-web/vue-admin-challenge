@@ -1,5 +1,5 @@
 <template>
-      <table class="table" style="overflow-x: scroll;">
+      <table class="table" >
         <thead class="thead-light">
           <tr>
             <th v-for="item in items" :key="item.id" :colspan="getColspan(item)" >
