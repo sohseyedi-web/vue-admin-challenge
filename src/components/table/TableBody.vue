@@ -6,15 +6,14 @@
   <td class="col-4" colspan="2">{{ truncateTextBody(article?.body) }}</td>
   <td class="col-2">
     <span class="">{{ toLocalDateString(article?.createdAt) }}</span>
-    <span class="dropdown">
-      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         ...
       </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-        <button class="dropdown-item" type="button">Edit</button>
-        <button class="dropdown-item" type="button">Delete</button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a  class="dropdown-item text-left" href="#">Something else here</a>
       </div>
-    </span>
+    </div>
   </td>
         
       

@@ -10,7 +10,7 @@
         </router-link>
       </ul> -->
       <ul class="w-100">
-        <li class="py-2">
+        <li>
           <router-link
             to="/articles"
             class="text-white py-2"
@@ -18,7 +18,7 @@
             All Articles
           </router-link>
         </li>
-        <li class="py-2">
+        <li>
           <router-link
             to="/articles/create"
             class="text-white py-2"
@@ -37,24 +37,24 @@
     padding: 0.813rem 0;
   }
   
-  ul li {
-    font-size: 1.125rem;
-    transition: all 0.4s ease-in-out;
-    padding-left: 2.2rem;
-    cursor: pointer;
-    width: 100%;
+
+  
+  ul li a.router-link-exact-active{
+    flex : 1;
+    background-color: rgba(255, 255, 255, 0.15);
   }
   
   ul li a{
-    flex : 1
+    font-size: 1.125rem;
+    transition: all 0.4s ease-in-out;
+    cursor: pointer;
+    flex: 1;
+    display: flex;
+    padding-left: 2rem;
   }
+ 
   
-  ul li a.router-link-exact-active{
-    background: #000;
-    width: 100%;
-  }
-  
-  ul  li:hover{
+  ul  li a:hover{
     background-color: rgba(255, 255, 255, 0.15);
     transition: all 0.4s ease-in-out;
   }
