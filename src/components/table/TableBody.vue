@@ -1,11 +1,11 @@
 <template>
-  <td class="col-1">{{ index + 1 }}</td>
+  <td>{{ index + 1 }}</td>
   <td class="col-2">Soheil Seyyedi</td>
   <td class="col-2">@{{ article?.author?.username }}</td>
   <td class="col-1">@fat</td>
   <td class="col-4" colspan="2">{{ truncateTextBody(article?.body) }}</td>
-  <td class="col-2">
-    <span class="">{{ toLocalDateString(article?.createdAt) }}</span>
+  <td class="col-2 d-flex">
+    <span class="mr-2">{{ toLocalDateString(article?.createdAt) }}</span>
     <div class="dropdown">
       <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         ...

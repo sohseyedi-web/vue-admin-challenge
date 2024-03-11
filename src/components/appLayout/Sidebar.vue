@@ -1,14 +1,8 @@
 <template>
-    <aside class="vh-100 sidebar text-white top-0 position-sticky left-0">
-      <h4 class="px-3">Post</h4>
-      <!-- <ul class="list">
-        <router-link to="/" class="py-2 text-white" active-class="">
-          <li class="w-100 py-2">All Articles</li>
-        </router-link>
-        <router-link to="/n" class="py-2 text-white">
-          <li class="w-100 py-2">New Article</li>
-        </router-link>
-      </ul> -->
+    <Back :active="active" :onUpdate="onUpdate"/>
+    <aside :class="active ? 'sidebar-active' : 'sidebar-fixed'">
+      <h4 class="px-3 text-white">Post</h4>
+      
       <ul class="w-100">
         <li>
           <router-link
@@ -29,14 +23,36 @@
       </ul>
     </aside>
   </template>
-  
+  <script>
+import Back from '../Back.vue';
+
+  export default{
+    props:['active','onUpdate'],
+    components: { Back }
+}
+</script>
   <style>
-  .sidebar {
+  .sidebar-active {
     width: 250px;
     background-color: #1c7cd5;
     padding: 0.813rem 0;
+    z-index: 50;
+    top: 0;
+    left: 0;
+    position: relative;
+    transition: all .4 ease-in-out;
+    height: 100vh;
   }
-  
+  .sidebar-fixed{
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: -50%;
+    background-color: #1c7cd5;
+    padding: 0.813rem 0;
+    z-index: 50;
+    transition: all .4 ease-in-out;
+  }
 
   
   ul li a.router-link-exact-active{

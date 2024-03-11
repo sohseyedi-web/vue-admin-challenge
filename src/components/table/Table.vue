@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <div>
-      <table class="table">
+      <table class="table" style="overflow-x: scroll;">
         <thead class="thead-light">
           <tr>
             <th v-for="item in items" :key="item.id" :colspan="getColspan(item)" >
@@ -15,8 +13,6 @@
           </tr>
         </tbody>
       </table>
-    </div>
-  </div>   
 </template>
   
   <script>
