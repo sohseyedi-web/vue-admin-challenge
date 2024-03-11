@@ -1,6 +1,6 @@
 <template>
     <Back :active="active" :onUpdate="onUpdate"/>
-    <aside :class="active ? 'sidebar' : 'd-none' ">
+    <aside :class="active ? 'sidebar' : 'sidebar-deactive' ">
       <h4 class="px-3 text-white">Post</h4>
       
       <ul class="w-100">
@@ -36,24 +36,28 @@ import Back from '../Back.vue';
     width: 0;
     top: 0;
     left: -100%;
-    transition: all .4 ease-in-out;
-
+    transition: left .4s linear;
+    position: fixed;
   }
   .sidebar {
     width: 250px;
     background-color: #1c7cd5;
     padding: 0.813rem 0;
-    transition: all .4 ease-in-out;
+    transition: left .4s linear;
     z-index: 50;
     top: 0;
     left: 0;
-    position: sticky;
-    min-height: 100dvh;
+    position: relative;
+    min-height: 100vh;
   }
   @media screen and (max-width: 1024px) {
     .sidebar {
-      display: fixed;
-    transition: all .4 ease-in-out;
+      width: 250px;
+      z-index: 50;
+      top: 0;
+      left: 0;
+      position: fixed;
+    transition: left .4s linear;
 
     }
   }
