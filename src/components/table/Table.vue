@@ -8,17 +8,19 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(article, index) in articles" :key="article.slug">
+          <tr  v-for="(article, index) in articles" :key="article.slug">
             <TableBody :index="index" :article="article"/>
           </tr>
         </tbody>
       </table>
+      <Pagination/>
 </template>
   
   <script>
   import { tableHeadItems } from '../../constants/tableHead';
   import TableBody from './TableBody.vue';
   import { getArticles } from '../../services/articleService';
+import Pagination from './Pagination.vue';
 
   
   export default {
@@ -69,7 +71,7 @@
     mounted() {
       this.getAllArticle();
     },
-    components: { TableBody },
+    components: { TableBody, Pagination },
   };
   </script>
   
