@@ -3,7 +3,7 @@
       <Navbar />
       <section class="d-flex vh-100">
         <Sidebar />
-        <div class="flex-grow-1 p-4 h-100" style="overflow-y: auto">
+        <div class="flex-grow-1 p-4 mh-100" style="overflow-y: auto">
           <slot></slot>
         </div>
       </section>
