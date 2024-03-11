@@ -7,12 +7,19 @@
   <td class="col-2 d-flex">
     <span class="mr-2">{{ toLocalDateString(article?.createdAt) }}</span>
     <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         ...
       </button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
-        <button class="dropdown-item" type="button">Edit</button>
+        <router-link
+            :to="'/articles/edit/' + article?.slug"
+            class="ml-2"
+            style="color:#373a3c ;"
+          >
+            Edit
+          </router-link>
         <div class="dropdown-divider"></div>
+        <span class="ml-2" style="color:#373a3c ;cursor: pointer;">Delete</span>
       </div>
     </div>
   </td>

@@ -33,7 +33,7 @@
           id="body"
           class="form-control no-resize"
           required
-          style="height: 207px; resize: none"
+          style="height: 225px; resize: none"
         />
       </div>
       <!-- show modal -->
@@ -51,7 +51,7 @@
       <!-- end modal -->
       <button type="submit" class="customBtn py-2 text-white">Submit</button>
     </div>
-    <div class="col-6 col-md-3 pt-2 d-none d-lg-block">
+    <div class="col-6 col-md-3 pt-1 d-none d-lg-block">
       <Tags />
     </div>
   </form>
