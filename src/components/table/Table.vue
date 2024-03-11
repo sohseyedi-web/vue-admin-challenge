@@ -2,7 +2,7 @@
       <table class="table" >
         <thead class="thead-light">
           <tr>
-            <th v-for="item in items" :key="item.id" :colspan="getColspan(item)" >
+            <th v-for="item in items" :class="item.label === 'Created' && 'd-flex align-items-center justify-content-end'" :key="item.id" :colspan="getColspan(item)" >
               {{ item.label }}
             </th>
           </tr>
@@ -53,7 +53,7 @@ import Pagination from './Pagination.vue';
         }
       },
       getColspan(item) {
-      return item.label === 'Excerpt' ? 2 : 1;
+      return item.label === 'Excerpt' ? '2' : '1';
     },
       prevPage() {
         if (this.currentPage > 1) {

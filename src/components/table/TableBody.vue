@@ -14,9 +14,9 @@
       </div>
     </div>
   </td>
-  <td class="col-4" colspan="2">{{ truncateTextBody(article?.body) }}</td>
-  <td class="col-2 d-flex">
-    <!-- <span class="mr-2">{{ toLocalDateString(article?.createdAt) }}</span> -->
+  <td colspan="2"  class="col-4">{{ truncateTextBody(article?.body) }}</td>
+  <td colspan="1" class="d-flex align-items-center justify-content-end">
+    <span class="mr-2">{{ toLocalDateString(article?.createdAt) }}</span>
     <div class="dropdown">
       <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         ...
