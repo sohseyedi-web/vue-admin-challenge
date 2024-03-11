@@ -2,7 +2,18 @@
   <td>{{ index + 1 }}</td>
   <td class="col-2">Soheil Seyyedi</td>
   <td class="col-2">@{{ article?.author?.username }}</td>
-  <td class="col-1">tags</td>
+  <td class="col-1">
+    <div class="dropdown">
+      <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        tags
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
+        <span class="d-block ml-1" v-for="tag in article?.tagList" :key="tag">
+          {{ tag }}
+        </span>
+      </div>
+    </div>
+  </td>
   <td class="col-4" colspan="2">{{ truncateTextBody(article?.body) }}</td>
   <td class="col-2 d-flex">
     <!-- <span class="mr-2">{{ toLocalDateString(article?.createdAt) }}</span> -->
