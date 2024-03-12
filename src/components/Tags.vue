@@ -5,15 +5,14 @@
   </div>
   <div class="customBoxTags">
     <div v-for="tag in tagItems" class="form-check">
-      
       <input
         class="form-check-input"
         type="checkbox"
         :value="tag"
         @change="addTags(tag)"
-        id="flexCheckDefault"
+        :id="'tagCheckbox_' + tag"
       />
-      <label class="form-check-label" for="flexCheckDefault">
+      <label class="form-check-label" :for="'tagCheckbox_' + tag">
         {{ tag }}
       </label>
     </div>
@@ -27,7 +26,7 @@ export default {
   data() {
     return {
       tagItems: [],
-      prevTags : this.tagList
+      prevTags: this.tagList,
     };
   },
   methods: {
@@ -35,13 +34,14 @@ export default {
       try {
         const data = await getAllTags();
         this.tagItems = data.tags;
+        this.tagItems.sort((a,b) =>a.localeCompare(b))
       } catch (error) {
         console.log(error);
       }
     },
-    addTags(tag){
-      this.prevTags.push(tag)
-    }
+    addTags(tag) {
+      this.prevTags.push(tag);
+    },
   },
 
   mounted() {

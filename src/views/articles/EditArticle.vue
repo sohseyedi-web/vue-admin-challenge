@@ -1,13 +1,13 @@
 <template>
   <AppLayout>
-    <ArticleFrom text="Edit Article" />
+    <ArticleForm text="Edit Article" />
   </AppLayout>
 </template>
 
 <script>
 import AppLayout from "../../components/appLayout/AppLayout.vue";
-import ArticleFrom from "../../components/ArticleFrom.vue";
+import ArticleForm from "../../components/ArticleForm.vue";
 export default {
-  components: { AppLayout, ArticleFrom },
+  components: { AppLayout, ArticleForm },
 };
 </script>

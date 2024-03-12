@@ -2,7 +2,7 @@
   <header class="d-flex align-items-center justify-content-between mb-3">
     <h3 class="title">{{ text }}</h3>
   </header>
-  <form class="row" @submit.prevent="addArticle">
+  <form class="row" @submit.prevent="submitForm">
     <div action="" class="col-12 col-md-9">
       <div class="form-group text-left mb-4">
         <label for="title" style="color: #373a3c" class="mb-1">Title:</label>
@@ -49,20 +49,24 @@
         Tags
       </div>
       <Modal>
-        <Tags :tagList="article.tagList"/>
+        <Tags :tagList="article.tagList" />
       </Modal>
       <!-- end modal -->
       <button type="submit" class="customBtn py-2 text-white">Submit</button>
     </div>
     <div class="col-6 col-md-3 pt-1 d-none d-lg-block">
-      <Tags :tagList="article.tagList"/>
+      <Tags :tagList="article.tagList" />
     </div>
   </form>
 </template>
 <script>
 import Tags from "./Tags.vue";
 import Modal from "./Modal.vue";
-import { createArticles } from "../services/articleService";
+import {
+  createArticles,
+  editArticle,
+  getSingleArticleBySlug,
+} from "../services/articleService";
 export default {
   components: { Tags, Modal },
   props: ["text"],
@@ -74,16 +78,41 @@ export default {
         body: "",
         tagList: [],
       },
+      slug: null,
     };
   },
+  created() {
+    this.slug = this.$route.params.slug;
+    this.getSingleArticle(this.slug);
+  },
   methods: {
-    async addArticle() {
+    async submitForm() {
+      if (this.slug && this.article) {
+        try {
+          await createArticles({
+            article: this.article,
+          });
+          this.$router.push("/articles");
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        try {
+          await editArticle({ article: this.article, slug: this.slug });
+          this.$router.push("/articles");
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    },
+    async getSingleArticle(slug) {
       try {
-        await createArticles({
-          article: this.article,
-        });
-        this.$router.push("/articles");
-      } catch (error) {}
+        const data = await getSingleArticleBySlug(slug);
+        this.article = data.article;
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
