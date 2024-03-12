@@ -1,65 +1,70 @@
 <template>
-  <table class="table" v-if="!isLoading">
-    <thead class="thead-light">
-      <tr>
-        <th
-          v-for="item in items"
-          :class="
-            item.label === 'Created' &&
-            'd-flex align-items-center justify-content-end'
-          "
-          :key="item.id"
-          :colspan="getColspan(item)"
-        >
-          {{ item.label }}
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(article, index) in paginatedData" :key="article.slug">
-        <TableBody :index="index" :article="article" />
-      </tr>
-    </tbody>
-  </table>
-  <pulse-loader :loading="isLoading" color="#1c7cd5" size=".5rem"></pulse-loader>
-  <div class="mx-auto w-25" v-if="!isLoading">
-    <nav aria-label="Page navigation example" class="w-100">
-      <ul class="pagination">
-        <li class="page-item">
-          <a
-            class="page-link"
-            @click="previousPage"
-            :disabled="currentPage === 1"
-            href="#"
-            aria-label="Previous"
+  <div v-if="!isLoading">
+    <!-- table -->
+    <table class="table" >
+      <thead class="thead-light">
+        <tr>
+          <th
+            v-for="item in items"
+            :class="
+              item.label === 'Created' &&
+              'd-flex align-items-center justify-content-end'
+            "
+            :key="item.id"
+            :colspan="getColspan(item)"
           >
-            <span aria-hidden="true">&#60;</span>
-            <span class="sr-only">Previous</span>
-          </a>
-        </li>
-        <li
-          class="page-item"
-          :class="{ active: currentPage === page && 'text-warning' }"
-          v-for="page in visiblePages"
-          :key="page"
-        >
-          <a class="page-link" @click="changePage(page)">{{ page }}</a>
-        </li>
-        <li class="page-item">
-          <a
-            class="page-link"
-            href="#"
-            aria-label="Next"
-            @click="nextPage"
-            :disabled="currentPage === totalPages"
+            {{ item.label }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(article, index) in paginatedData" :key="article.slug">
+          <TableBody :index="index" :article="article" />
+        </tr>
+      </tbody>
+    </table>
+    <!--pagination  -->
+    <div class="mx-auto w-25" >
+      <nav aria-label="Page navigation example" class="w-100">
+        <ul class="pagination">
+          <li class="page-item">
+            <a
+              class="page-link"
+              @click="previousPage"
+              :disabled="currentPage === 1"
+              href="#"
+              aria-label="Previous"
+            >
+              <span aria-hidden="true">&#60;</span>
+              <span class="sr-only">Previous</span>
+            </a>
+          </li>
+          <li
+            class="page-item"
+            :class="{ active: currentPage === page && 'text-warning' }"
+            v-for="page in visiblePages"
+            :key="page"
           >
-            <span aria-hidden="true">&#62;</span>
-            <span class="sr-only">Next</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
+            <a class="page-link" @click="changePage(page)">{{ page }}</a>
+          </li>
+          <li class="page-item">
+            <a
+              class="page-link"
+              href="#"
+              aria-label="Next"
+              @click="nextPage"
+              :disabled="currentPage === totalPages"
+            >
+              <span aria-hidden="true">&#62;</span>
+              <span class="sr-only">Next</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
   </div>
+  <!-- loading icon -->
+  <pulse-loader class="d-flex align-items-center justify-content-center w-100 " :loading="isLoading" color="#1c7cd5" size="1rem"></pulse-loader>
 </template>
 
 <script>

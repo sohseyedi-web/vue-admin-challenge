@@ -1,6 +1,6 @@
 <template>
   <AppLayout>
-    <h3 class="title">All Articles</h3>
+    <h3 class="title">All Posts</h3>
     <Table />
   </AppLayout>
 </template>

@@ -5,7 +5,7 @@
       <div class="d-none d-lg-block">
         <p v-if="!isLoading" class="m-0">Welcome {{ username }}</p>
         <pulse-loader
-          class="customBtn py-2 text-center"
+          class="ml-2 text-center"
           :loading="isLoading"
           color="#fff"
           size=".5rem"
