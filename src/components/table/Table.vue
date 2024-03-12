@@ -16,12 +16,32 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(article, index) in articles" :key="article.slug">
+      <tr v-for="(article, index) in paginatedData" :key="article.slug">
         <TableBody :index="index" :article="article" />
       </tr>
     </tbody>
   </table>
-  <Pagination />
+  <div class="mx-auto w-25">
+    <nav aria-label="Page navigation example" class="w-100">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" @click="previousPage" :disabled="currentPage === 1" href="#" aria-label="Previous">
+            <span aria-hidden="true">&#60;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+        <li class="page-item" :class="{ active: currentPage === page && 'text-warning'}" v-for="page in visiblePages" :key="page">
+          <a class="page-link" @click="changePage(page)">{{ page }}</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Next" @click="nextPage" :disabled="currentPage === totalPages">
+            <span aria-hidden="true">&#62;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </template>
 
 <script>
@@ -35,25 +55,18 @@ export default {
     return {
       items: tableHeadItems,
       articles: [],
-      itemsPerPage: 10,
+      articleLen : null,
+      itemsPerPage:10,
       currentPage: 1,
     };
   },
-  computed: {
-    totalPages() {
-      return Math.ceil(this.articles.articlesCount / this.itemsPerPage);
-    },
-    paginatedData() {
-      const start = (this.currentPage - 1) * this.itemsPerPage;
-      const end = start + this.itemsPerPage;
-      return this.articles.articles?.slice(start, end);
-    },
-  },
+
   methods: {
     async getAllArticle() {
       try {
         const data = await getArticles();
         this.articles = data.articles;
+        this.articleLen = data.articlesCount
       } catch (error) {
         console.log(error);
       }
@@ -61,7 +74,10 @@ export default {
     getColspan(item) {
       return item.label === "Excerpt" ? "2" : "1";
     },
-    prevPage() {
+    changePage(page) {
+      this.currentPage = page;
+    },
+    previousPage() {
       if (this.currentPage > 1) {
         this.currentPage--;
       }
@@ -70,16 +86,34 @@ export default {
       if (this.currentPage < this.totalPages) {
         this.currentPage++;
       }
+    }
+  },
+  computed: {
+    paginatedData() {
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+      const endIndex = startIndex + this.itemsPerPage;
+      return this.articles.slice(startIndex, endIndex);
     },
+    totalPages() {
+      return Math.ceil(this.articleLen / this.itemsPerPage);
+    },
+    visiblePages() {
+      const totalPages = this.totalPages;
+      let startPage = this.currentPage;
+      let endPage = this.currentPage + 3;
+      
+      if (endPage > totalPages) {
+        endPage = totalPages;
+        startPage = Math.max(endPage - 3, 1);
+      }
+      
+      return Array(endPage - startPage + 1).fill().map((_, index) => startPage + index);
+    }
   },
   mounted() {
     this.getAllArticle();
   },
-  watch: {
-    articles() {
-      this.getAllArticle();
-    },
-  },
+  
   components: { TableBody, Pagination },
 };
 </script>

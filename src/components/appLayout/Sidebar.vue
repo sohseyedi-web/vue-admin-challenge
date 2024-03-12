@@ -48,7 +48,7 @@ import Back from '../Back.vue';
     top: 0;
     left: 0;
     position: relative;
-    min-height: 100%;
+    min-height: 100vh;
   }
   @media screen and (max-width: 1024px) {
     .sidebar {
