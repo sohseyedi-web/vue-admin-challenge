@@ -2,7 +2,7 @@
       <Navbar :onUpdate="handleSidebar"/>
       <section class="d-flex">
         <Sidebar :active="active" :onUpdate="handleSidebar"/>
-        <div class="flex-grow-1 p-4 vh-100 pb-5" >
+        <div class="flex-grow-1 p-4" style="overflow-y: hidden;">
           <slot></slot>
         </div>
       </section>
