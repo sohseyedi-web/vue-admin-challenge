@@ -87,18 +87,18 @@ export default {
   },
   methods: {
     async submitForm() {
-      if (this.slug && this.article) {
+      if (this.slug) {
         try {
-          await createArticles({
-            article: this.article,
-          });
+          await editArticle({ article: this.article, slug: this.slug });
           this.$router.push("/articles");
         } catch (error) {
           console.log(error);
         }
       } else {
         try {
-          await editArticle({ article: this.article, slug: this.slug });
+          await createArticles({
+            article: this.article,
+          });
           this.$router.push("/articles");
         } catch (error) {
           console.log(error);
