@@ -4,7 +4,7 @@
     <input type="text" id="title" class="form-control" placeholder="New tag" />
   </div>
   <div class="customBoxTags">
-    <div v-for="tag in tagItems" class="form-check">
+    <div v-if="!isLoading" v-for="tag in tagItems" class="form-check">
       <input
         class="form-check-input"
         type="checkbox"
@@ -16,10 +16,12 @@
         {{ tag }}
       </label>
     </div>
+    <pulse-loader :loading="isLoading" color="#1c7cd5" size=".5rem"></pulse-loader>
   </div>
 </template>
 <script>
 import { getAllTags } from "../services/tagsService";
+import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 
 export default {
   props: ["tagList"],
@@ -27,16 +29,20 @@ export default {
     return {
       tagItems: [],
       prevTags: this.tagList,
+      isLoading: false,
     };
   },
   methods: {
     async getTags() {
+      this.isLoading = true;
       try {
         const data = await getAllTags();
         this.tagItems = data.tags;
-        this.tagItems.sort((a,b) =>a.localeCompare(b))
+        this.tagItems.sort((a, b) => a.localeCompare(b));
       } catch (error) {
         console.log(error);
+      } finally {
+        this.isLoading = false;
       }
     },
     addTags(tag) {
@@ -46,6 +52,9 @@ export default {
 
   mounted() {
     this.getTags();
+  },
+  components: {
+    PulseLoader,
   },
 };
 </script>

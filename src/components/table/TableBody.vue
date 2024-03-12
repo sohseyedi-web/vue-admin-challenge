@@ -71,9 +71,16 @@
               data-dismiss="modal"
               type="submit"
               class="btn btn-danger"
+              v-if="!isLoading"
             >
               Yes
             </button>
+            <pulse-loader
+              class="btn btn-danger"
+              :loading="isLoading"
+              color="#fff"
+              size=".5rem"
+            ></pulse-loader>
           </template>
         </Modal>
       </div>
@@ -85,6 +92,8 @@ import { truncateText } from "../../utils/truncateText";
 import { toLocalDate } from "../../utils/toLocalDate";
 import Modal from "../Modal.vue";
 import { deleteArticle } from "../../services/articleService";
+import PulseLoader from "vue-spinner/src/PulseLoader.vue";
+
 export default {
   props: ["index", "article"],
   data() {
@@ -115,7 +124,7 @@ export default {
       }
     },
   },
-  components: { Modal },
+  components: { Modal, PulseLoader },
 };
 </script>
 <style>
