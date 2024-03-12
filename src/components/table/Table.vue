@@ -1,86 +1,95 @@
 <template>
-      <table class="table" >
-        <thead class="thead-light">
-          <tr>
-            <th v-for="item in items" :class="item.label === 'Created' && 'd-flex align-items-center justify-content-end'" :key="item.id" :colspan="getColspan(item)" >
-              {{ item.label }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr  v-for="(article, index) in articles" :key="article.slug">
-            <TableBody :index="index" :article="article"/>
-          </tr>
-        </tbody>
-      </table>
-      <Pagination/>
+  <table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th
+          v-for="item in items"
+          :class="
+            item.label === 'Created' &&
+            'd-flex align-items-center justify-content-end'
+          "
+          :key="item.id"
+          :colspan="getColspan(item)"
+        >
+          {{ item.label }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(article, index) in articles" :key="article.slug">
+        <TableBody :index="index" :article="article" />
+      </tr>
+    </tbody>
+  </table>
+  <Pagination />
 </template>
-  
-  <script>
-  import { tableHeadItems } from '../../constants/tableHead';
-  import TableBody from './TableBody.vue';
-  import { getArticles } from '../../services/articleService';
-import Pagination from './Pagination.vue';
 
-  
-  export default {
-    data() {
-      return {
-        items: tableHeadItems,
-        articles: [],
-        itemsPerPage: 10,
-        currentPage: 1,
-      };
+<script>
+import { tableHeadItems } from "../../constants/tableHead";
+import TableBody from "./TableBody.vue";
+import { getArticles } from "../../services/articleService";
+import Pagination from "./Pagination.vue";
+
+export default {
+  data() {
+    return {
+      items: tableHeadItems,
+      articles: [],
+      itemsPerPage: 10,
+      currentPage: 1,
+    };
+  },
+  computed: {
+    totalPages() {
+      return Math.ceil(this.articles.articlesCount / this.itemsPerPage);
     },
-    computed: {
-      totalPages() {
-        return Math.ceil(this.articles.articlesCount / this.itemsPerPage);
-      },
-      paginatedData() {
-        const start = (this.currentPage - 1) * this.itemsPerPage;
-        const end = start + this.itemsPerPage;
-        return this.articles.articles?.slice(start, end);
-      },
+    paginatedData() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.articles.articles?.slice(start, end);
     },
-    methods: {
-      async getAllArticle() {
-        try {
-          const data = await getArticles();
-          this.articles = data.articles;
-            console.log(this.articles);
-        } catch (error) {
-          console.log(error);
-        }
-      },
-      getColspan(item) {
-      return item.label === 'Excerpt' ? '2' : '1';
+  },
+  methods: {
+    async getAllArticle() {
+      try {
+        const data = await getArticles();
+        this.articles = data.articles;
+      } catch (error) {
+        console.log(error);
+      }
     },
-      prevPage() {
-        if (this.currentPage > 1) {
-          this.currentPage--;
-        }
-      },
-      nextPage() {
-        if (this.currentPage < this.totalPages) {
-          this.currentPage++;
-        }
-      },
-      
-      
+    getColspan(item) {
+      return item.label === "Excerpt" ? "2" : "1";
     },
-    mounted() {
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    },
+  },
+  mounted() {
+    this.getAllArticle();
+  },
+  watch: {
+    articles() {
       this.getAllArticle();
     },
-    components: { TableBody, Pagination },
-  };
-  </script>
-  
-  <style>
-  th {
-    color: #55595c;
-    font-family: Helvetica;
-  }
-  td{
-    color : #373a3c;
-  }
-  </style>
+  },
+  components: { TableBody, Pagination },
+};
+</script>
+
+<style>
+th {
+  color: #55595c;
+  font-family: Helvetica;
+}
+td {
+  color: #373a3c;
+}
+</style>

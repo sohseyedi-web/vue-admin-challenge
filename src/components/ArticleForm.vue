@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     async submitForm() {
-      if (this.slug) {
+      if (this.slug && this.article) {
         try {
           await editArticle({ article: this.article, slug: this.slug });
           this.$router.push("/articles");

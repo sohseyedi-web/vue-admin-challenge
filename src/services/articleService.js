@@ -14,3 +14,6 @@ export function createArticles({ article }) {
 export function editArticle({ article, slug }) {
   return http.put(`/articles/${slug}`, { article }).then((res) => res.data);
 }
+export function deleteArticle(slug) {
+  return http.delete(`/articles/${slug}`).then((res) => res.data);
+}
