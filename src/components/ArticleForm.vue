@@ -44,18 +44,18 @@
         class="w-100 form-control d-lg-none pointer my-3"
         data-toggle="modal"
         data-target="#exampleModalCenter"
-        style="cursor: pointer;"
+        style="cursor: pointer"
       >
         Tags
       </div>
       <Modal>
-        <Tags @tags-selected="handleTagsSelection"/>
+        <Tags :tagList="article.tagList"/>
       </Modal>
       <!-- end modal -->
       <button type="submit" class="customBtn py-2 text-white">Submit</button>
     </div>
     <div class="col-6 col-md-3 pt-1 d-none d-lg-block">
-      <Tags @tags-selected="handleTagsSelection"/>
+      <Tags :tagList="article.tagList"/>
     </div>
   </form>
 </template>
@@ -63,46 +63,28 @@
 import Tags from "./Tags.vue";
 import Modal from "./Modal.vue";
 import { createArticles } from "../services/articleService";
-import { getAllTags } from "../services/tagsService";
 export default {
   components: { Tags, Modal },
   props: ["text"],
   data() {
     return {
-      article:{
-        title:"",
-        description : "",
-        body :"",
-        tagList:[]
+      article: {
+        title: "",
+        description: "",
+        body: "",
+        tagList: [],
       },
-      tagItems : []
-    }
+    };
   },
   methods: {
-    async addArticle(){
+    async addArticle() {
       try {
         await createArticles({
-          article : this.article
+          article: this.article,
         });
-        this.$router.push("/articles")
-      } catch (error) {
-        
-      }
+        this.$router.push("/articles");
+      } catch (error) {}
     },
-    async getTags(){
-      try {
-        const data = await getAllTags()
-        this.tagItems = data.tags.sort((a,b) => a - b)
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    handleSelectTags(tag){
-      this.article.tagList = tag
-    }
-  },
-  mounted() {
-    this.getTags()
   },
 };
 </script>

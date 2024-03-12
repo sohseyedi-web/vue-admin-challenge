@@ -1,50 +1,53 @@
 <template>
   <h6>Tags</h6>
   <div class="form-group text-left">
-    <input
-      type="text"
-      id="title"
-      class="form-control"
-      placeholder="New tag"
-    />
+    <input type="text" id="title" class="form-control" placeholder="New tag" />
   </div>
   <div class="customBoxTags">
-    
     <div v-for="tag in tagItems" class="form-check">
-      <input class="form-check-input" type="checkbox" :value="tag"  id="flexCheckDefault">
+      
+      <input
+        class="form-check-input"
+        type="checkbox"
+        :value="tag"
+        @change="addTags(tag)"
+        id="flexCheckDefault"
+      />
       <label class="form-check-label" for="flexCheckDefault">
-        {{ tag }} {{ tags }}
+        {{ tag }}
       </label>
     </div>
   </div>
 </template>
 <script>
-import { getAllTags } from '../services/tagsService';
+import { getAllTags } from "../services/tagsService";
 
 export default {
-  props:['@tags-selected'],
+  props: ["tagList"],
   data() {
     return {
-      tagItems : [],
-    }
+      tagItems: [],
+      prevTags : this.tagList
+    };
   },
   methods: {
-    async getTags(){
+    async getTags() {
       try {
-        const data = await getAllTags()
-        console.log(this.prevTags);
-        this.tagItems = data.tags
+        const data = await getAllTags();
+        this.tagItems = data.tags;
       } catch (error) {
         console.log(error);
       }
     },
-    
+    addTags(tag){
+      this.prevTags.push(tag)
+    }
   },
-  
+
   mounted() {
-    this.getTags()
+    this.getTags();
   },
-}
+};
 </script>
 <style>
 .customBoxTags {
