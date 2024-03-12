@@ -2,8 +2,8 @@
   <header class="customNavbar">
     <div class="d-flex align-items-center">
       <h1 class="mr-3 mb-0" style="font-size: 1.375rem">Arvan Challenge</h1>
-      <div>
-        <p v-if="!isLoading">Welcome {{ username }}</p>
+      <div class="d-none d-lg-block">
+        <p v-if="!isLoading" class="m-0">Welcome {{ username }}</p>
         <pulse-loader
           class="customBtn py-2 text-center"
           :loading="isLoading"
@@ -29,7 +29,16 @@
           />
         </svg>
       </span>
-      <button class="customButton">Logout</button>
+      <button class="customButton d-none d-lg-flex">Logout</button>
+      <div class="dropdown d-lg-none">
+        <button class="customButton dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Profile
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
+          <button class="dropdown-item" type="button">{{username}}</button>
+          <button class="dropdown-item" type="button">log out</button>
+        </div>
+      </div>
     </div>
   </header>
 </template>
