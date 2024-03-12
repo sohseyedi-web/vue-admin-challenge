@@ -52,7 +52,13 @@
         <Tags :tagList="article.tagList" />
       </Modal>
       <!-- end modal -->
-      <button type="submit" class="customBtn py-2 text-white">Submit</button>
+      <button type="submit" class="customBtn py-2 text-white" v-if="!isLoading">Submit</button>
+      <pulse-loader
+      class="customBtn py-2 text-center"
+        :loading="isLoading"
+        color="#fff"
+        size=".5rem"
+      ></pulse-loader>
     </div>
     <div class="col-6 col-md-3 pt-1 d-none d-lg-block">
       <Tags :tagList="article.tagList" />
@@ -62,13 +68,14 @@
 <script>
 import Tags from "./Tags.vue";
 import Modal from "./Modal.vue";
+import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 import {
   createArticles,
   editArticle,
   getSingleArticleBySlug,
 } from "../services/articleService";
 export default {
-  components: { Tags, Modal },
+  components: { Tags, Modal, PulseLoader },
   props: ["text"],
   data() {
     return {
@@ -79,6 +86,7 @@ export default {
         tagList: [],
       },
       slug: null,
+      isLoading: false,
     };
   },
   created() {
@@ -88,13 +96,18 @@ export default {
   methods: {
     async submitForm() {
       if (this.slug && this.article) {
+        this.isLoading = true;
         try {
           await editArticle({ article: this.article, slug: this.slug });
           this.$router.push("/articles");
         } catch (error) {
           console.log(error);
+        } finally {
+          this.isLoading = false;
         }
       } else {
+        this.isLoading = true;
+
         try {
           await createArticles({
             article: this.article,
@@ -102,6 +115,8 @@ export default {
           this.$router.push("/articles");
         } catch (error) {
           console.log(error);
+        } finally {
+          this.isLoading = false;
         }
       }
     },

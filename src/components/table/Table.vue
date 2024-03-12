@@ -1,5 +1,5 @@
 <template>
-  <table class="table">
+  <table class="table" v-if="!isLoading">
     <thead class="thead-light">
       <tr>
         <th
@@ -21,20 +21,38 @@
       </tr>
     </tbody>
   </table>
-  <div class="mx-auto w-25">
+  <pulse-loader :loading="isLoading" color="#1c7cd5" size=".5rem"></pulse-loader>
+  <div class="mx-auto w-25" v-if="!isLoading">
     <nav aria-label="Page navigation example" class="w-100">
       <ul class="pagination">
         <li class="page-item">
-          <a class="page-link" @click="previousPage" :disabled="currentPage === 1" href="#" aria-label="Previous">
+          <a
+            class="page-link"
+            @click="previousPage"
+            :disabled="currentPage === 1"
+            href="#"
+            aria-label="Previous"
+          >
             <span aria-hidden="true">&#60;</span>
             <span class="sr-only">Previous</span>
           </a>
         </li>
-        <li class="page-item" :class="{ active: currentPage === page && 'text-warning'}" v-for="page in visiblePages" :key="page">
+        <li
+          class="page-item"
+          :class="{ active: currentPage === page && 'text-warning' }"
+          v-for="page in visiblePages"
+          :key="page"
+        >
           <a class="page-link" @click="changePage(page)">{{ page }}</a>
         </li>
         <li class="page-item">
-          <a class="page-link" href="#" aria-label="Next" @click="nextPage" :disabled="currentPage === totalPages">
+          <a
+            class="page-link"
+            href="#"
+            aria-label="Next"
+            @click="nextPage"
+            :disabled="currentPage === totalPages"
+          >
             <span aria-hidden="true">&#62;</span>
             <span class="sr-only">Next</span>
           </a>
@@ -49,26 +67,31 @@ import { tableHeadItems } from "../../constants/tableHead";
 import TableBody from "./TableBody.vue";
 import { getArticles } from "../../services/articleService";
 import Pagination from "./Pagination.vue";
+import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 
 export default {
   data() {
     return {
       items: tableHeadItems,
       articles: [],
-      articleLen : null,
-      itemsPerPage:10,
+      articleLen: null,
+      itemsPerPage: 10,
       currentPage: 1,
+      isLoading: false,
     };
   },
 
   methods: {
     async getAllArticle() {
+      this.isLoading = true;
       try {
         const data = await getArticles();
         this.articles = data.articles;
-        this.articleLen = data.articlesCount
+        this.articleLen = data.articlesCount;
       } catch (error) {
         console.log(error);
+      } finally {
+        this.isLoading = false;
       }
     },
     getColspan(item) {
@@ -86,7 +109,7 @@ export default {
       if (this.currentPage < this.totalPages) {
         this.currentPage++;
       }
-    }
+    },
   },
   computed: {
     paginatedData() {
@@ -101,20 +124,22 @@ export default {
       const totalPages = this.totalPages;
       let startPage = this.currentPage;
       let endPage = this.currentPage + 3;
-      
+
       if (endPage > totalPages) {
         endPage = totalPages;
         startPage = Math.max(endPage - 3, 1);
       }
-      
-      return Array(endPage - startPage + 1).fill().map((_, index) => startPage + index);
-    }
+
+      return Array(endPage - startPage + 1)
+        .fill()
+        .map((_, index) => startPage + index);
+    },
   },
   mounted() {
     this.getAllArticle();
   },
-  
-  components: { TableBody, Pagination },
+
+  components: { TableBody, Pagination, PulseLoader },
 };
 </script>
 

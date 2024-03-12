@@ -36,7 +36,13 @@
           required
         />
       </div>
-      <ButtonFormVue text="Register" />
+      <ButtonFormVue text="Register" v-if="isLoading" />
+      <pulse-loader
+        class="btn btn-primary w-100 py-2 text-center d-flex align-items-center justify-content-center"
+        :loading="isLoading"
+        color="#fff"
+        size=".5rem"
+      ></pulse-loader>
       <div class="d-flex align-items-center gap-2 mt-3" style="color: #373a3c">
         <span class="mr-2">Already Registered?</span>
         <router-link to="/login">
@@ -59,8 +65,7 @@ export default {
         email: "",
         password: "",
       },
-      notifyErr: false,
-      notifySuccess: false,
+      isLoading: false,
     };
   },
   methods: {

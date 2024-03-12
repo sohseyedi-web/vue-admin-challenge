@@ -26,7 +26,13 @@
           required
         />
       </div>
-      <ButtonFormVue text="Login" />
+      <ButtonFormVue text="Login" v-if="isLoading" />
+      <pulse-loader
+        class="btn btn-primary w-100 py-2 text-center d-flex align-items-center justify-content-center"
+        :loading="isLoading"
+        color="#fff"
+        size=".5rem"
+      ></pulse-loader>
       <div class="d-flex align-items-center mt-3" style="color: #373a3c">
         <span class="mr-2">Don’t have account?</span>
         <router-link to="/register">
@@ -50,10 +56,12 @@ export default {
         email: "",
         password: "",
       },
+      isLoading: false,
     };
   },
   methods: {
     async submitForm() {
+      this.isLoading = true;
       try {
         const data = await loginUser({
           user: this.user,
@@ -62,6 +70,8 @@ export default {
         this.$router.push("/");
       } catch (error) {
         console.log(error);
+      } finally {
+        this.isLoading = false;
       }
     },
   },
