@@ -3,19 +3,23 @@
   <div class="form-group text-left">
     <input type="text" id="title" class="form-control" placeholder="New tag" />
   </div>
-  <div class="customBoxTags">
+  <div class="customBoxTags" :class="inputError ? 'borderErr' : 'borderSucc'">
     <div v-if="!isLoading" v-for="tag in tagItems" class="form-check">
       <input
         class="form-check-input"
         type="checkbox"
         :value="tag"
         @change="addTags(tag)"
+        
         :id="'tagCheckbox_' + tag"
       />
       <label class="form-check-label" :for="'tagCheckbox_' + tag">
         {{ tag }}
       </label>
     </div>
+    <span v-if="inputError" class="err position-absolute">{{
+      inputError
+    }}</span>
     <pulse-loader :loading="isLoading" color="#1c7cd5" size=".5rem"></pulse-loader>
   </div>
 </template>
@@ -24,7 +28,7 @@ import { getAllTags } from "../services/tagsService";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 
 export default {
-  props: ["tagList"],
+  props: ["tagList",'inputError'],
   data() {
     return {
       tagItems: [],

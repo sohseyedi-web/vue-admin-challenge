@@ -10,3 +10,18 @@ a {
   font-family: "Helvetica Neue", sans-serif;
   list-style-type: none;
 }
+
+.err {
+  color: #cb2e25;
+  text-transform: capitalize;
+}
+.borderErr {
+  border: 1px solid #cb2e25 !important;
+}
+.borderSucc {
+  border: 1px solid #ddd !important;
+}
+.textInput {
+  color: #373a3c;
+  text-transform: capitalize;
+}

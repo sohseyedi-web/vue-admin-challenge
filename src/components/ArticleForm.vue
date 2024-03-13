@@ -4,64 +4,62 @@
   </header>
   <form class="row" @submit.prevent="submitForm">
     <div action="" class="col-12 col-md-9">
-      <div class="form-group text-left mb-4">
-        <label for="title" style="color: #373a3c" class="mb-1">Title:</label>
-        <input
-          type="text"
-          id="title"
-          v-model="article.title"
-          class="form-control"
-          style="height: 40px"
-          required
-        />
-      </div>
-      <div class="form-group text-left my-4">
-        <label for="description" style="color: #373a3c" class="mb-1"
-          >Description:</label
+      <TextField
+        name="title"
+        label="title"
+        type="text"
+        v-model="article.title"
+        :inputError="inputError"
+      />
+      <TextField
+        name="description"
+        label="description"
+        type="text"
+        v-model="article.description"
+        :inputError="inputError"
+      />
+      <div class="form-group text-left my-4 postion-relative">
+        <label for="body" :class="inputError ? 'err' : 'textInput'"
+          >Body:</label
         >
-        <input
-          type="text"
-          id="description"
-          style="height: 40px"
-          class="form-control"
-          v-model="article.description"
-          required
-        />
-      </div>
-      <div class="form-group text-left my-4">
-        <label for="body" style="color: #373a3c" class="mb-1">Body:</label>
         <textarea
           type="text"
           id="body"
           class="form-control no-resize"
-          required
+          :class="inputError ? 'borderErr' : 'borderSucc'"
           v-model="article.body"
           style="height: 225px; resize: none"
         />
+        <span v-if="inputError" class="err position-absolute">{{
+          inputError
+        }}</span>
       </div>
       <!-- show modal -->
       <div
-        class="w-100 form-control d-lg-none pointer my-3"
+        class="w-100 form-control d-lg-none pointer my-3 position-relative"
         data-toggle="modal"
         data-target="#exampleModalCenter"
         style="cursor: pointer"
+        :class="inputError ? 'borderErr' : 'borderSucc'"
       >
         Tags
       </div>
       <Modal>
-        <Tags :tagList="article.tagList" />
+        <Tags label="Tags" :tag-list="article.tagList" :inputError="inputError" />
       </Modal>
       <!-- end modal -->
-      <button type="submit" class="customBtn py-2 text-white" v-if="!isLoading">Submit</button>
+      <button type="submit" class="customBtn py-2 text-white" v-if="!isLoading">
+        Submit
+      </button>
       <pulse-loader
-      class="customBtn py-2 text-center"
+        class="customBtn py-2 text-center"
         :loading="isLoading"
         color="#fff"
         size=".5rem"
       ></pulse-loader>
     </div>
-    <div class="col-6 col-md-3 pt-1 d-none d-lg-block">
-      <Tags :tagList="article.tagList" />
+    <div class="col-6 col-md-3 pt-1 d-none d-lg-block position-relative">
+      <Tags label="Tags" :tagList="article.tagList" :inputError="inputError" />
     </div>
   </form>
 </template>
@@ -74,8 +72,9 @@ import {
   editArticle,
   getSingleArticleBySlug,
 } from "../services/articleService";
+import TextField from "./TextField.vue";
 export default {
-  components: { Tags, Modal, PulseLoader },
+  components: { Tags, Modal, PulseLoader, TextField },
   props: ["text"],
   data() {
     return {
@@ -87,6 +86,7 @@ export default {
       },
       slug: null,
       isLoading: false,
+      inputError: "",
     };
   },
   created() {
@@ -95,28 +95,37 @@ export default {
   },
   methods: {
     async submitForm() {
-      if (this.slug && this.article) {
-        this.isLoading = true;
-        try {
-          await editArticle({ article: this.article, slug: this.slug });
-          this.$router.push("/articles");
-        } catch (error) {
-          console.log(error);
-        } finally {
-          this.isLoading = false;
-        }
+      if (
+        this.article.title.length === 0 &&
+        this.article.description.length === 0 &&
+        this.article.body.length === 0 &&
+        this.article.tagList.length === 0
+      ) {
+        this.inputError = "Required field";
       } else {
-        this.isLoading = true;
+        if (this.slug && this.article) {
+          this.isLoading = true;
+          try {
+            await editArticle({ article: this.article, slug: this.slug });
+            this.$router.push("/articles");
+          } catch (error) {
+            console.log(error);
+          } finally {
+            this.isLoading = false;
+          }
+        } else {
+          this.isLoading = true;
 
-        try {
-          await createArticles({
-            article: this.article,
-          });
-          this.$router.push("/articles");
-        } catch (error) {
-          console.log(error);
-        } finally {
-          this.isLoading = false;
+          try {
+            await createArticles({
+              article: this.article,
+            });
+            this.$router.push("/articles");
+          } catch (error) {
+            console.log(error);
+          } finally {
+            this.isLoading = false;
+          }
         }
       }
     },
