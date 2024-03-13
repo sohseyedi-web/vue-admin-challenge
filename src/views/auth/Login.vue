@@ -10,6 +10,7 @@
         type="email"
         v-model="user.email"
         :inputError="inputError"
+        
       />
       <TextField
         name="password"
@@ -23,14 +24,16 @@
       <pulse-loader
         class="btn btn-primary w-100 py-2 text-center d-flex align-items-center justify-content-center"
         :loading="isLoading"
-        v-else="isLoading"
+        v-else-if="isLoading"
         color="#fff"
         size=".5rem"
       ></pulse-loader>
       <div class="d-flex align-items-center mt-3" style="color: #373a3c">
         <span class="mr-2">Don’t have account?</span>
         <router-link to="/register">
-          <span style="color: #373a3c" class="font-weight-bold">Register Now</span>
+          <span style="color: #373a3c" class="font-weight-bold"
+            >Register Now</span
+          >
         </router-link>
       </div>
     </form>
@@ -58,7 +61,7 @@ export default {
   methods: {
     async submitForm() {
       if (this.user.email.length === 0 && this.user.password.length === 0) {
-        this.inputError = "Required field"
+        this.inputError = "Required field";
       } else {
         this.isLoading = true;
         try {
@@ -72,6 +75,13 @@ export default {
         } finally {
           this.isLoading = false;
         }
+      }
+    },
+    handleError(value) {
+      if (value.length === 0) {
+        this.inputError = "Required field";
+      } else {
+        this.inputError = "";
       }
     },
   },
