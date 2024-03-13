@@ -1,7 +1,9 @@
 import http from "./http";
 
-export function getArticles() {
-  return http.get("/articles").then((res) => res.data);
+export function getArticles(limit, offset = 1) {
+  return http
+    .get(`/articles?limit=${limit}&offset=${offset}`)
+    .then((res) => res.data);
 }
 
 export function getSingleArticleBySlug(slug) {

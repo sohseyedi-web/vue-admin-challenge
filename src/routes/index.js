@@ -2,28 +2,38 @@ import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
   {
-    path: "/articles",
+    path: "/articles/page/:page",
     name: "Home",
-    component: () => import(/*webpackChunkName:"home"*/ "../views/articles/AllArticles.vue"),
+    props: true,
+
+    component: () =>
+      import(/*webpackChunkName:"home"*/ "../views/articles/AllArticles.vue"),
   },
+  {
+    path: "/articles/page/1",
+    alias: "/articles",
+    name: "HomeRedirect",
+    component: () =>
+      import(/*webpackChunkName:"home"*/ "../views/articles/AllArticles.vue"),
+    props: true,
+  },
+
   {
     path: "/articles/create",
     name: "Create",
-    component: () => import(/*webpackChunkName:"create"*/ "../views/articles/CreateArticle.vue"),
+    component: () =>
+      import(
+        /*webpackChunkName:"create"*/ "../views/articles/CreateArticle.vue"
+      ),
   },
+
   {
     path: "/articles/edit/:slug",
     name: "Edit",
-    component: () => import(/*webpackChunkName:"edit"*/ "../views/articles/EditArticle.vue"),
+    component: () =>
+      import(/*webpackChunkName:"edit"*/ "../views/articles/EditArticle.vue"),
   },
-  {
-    path:"/",
-    redirect : "/articles",
-  },
-  {
-    path:"/articles/page/1",
-    redirect : "/articles",
-  },
+
   {
     path: "/login",
     name: "Login",
@@ -33,7 +43,7 @@ const routes = [
   {
     path: "/register",
     name: "Register",
-    
+
     component: () =>
       import(/*webpackChunkName:"regsiter"*/ "../views/auth/Register.vue"),
   },
