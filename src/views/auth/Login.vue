@@ -30,7 +30,7 @@
       <div class="d-flex align-items-center mt-3" style="color: #373a3c">
         <span class="mr-2">Don’t have account?</span>
         <router-link to="/register">
-          <span>Register Now</span>
+          <span style="color: #373a3c" class="font-weight-bold">Register Now</span>
         </router-link>
       </div>
     </form>
