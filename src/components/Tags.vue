@@ -10,10 +10,11 @@
         name="tagList"
         type="checkbox"
         :value="tag"
-        @change="$emit(`update:modelValue[${index}]`, $event.target.value)"
+        :checked="isChecked[tag]"
+        @change="updateInput($event, tag)"
         :id="'tagCheckbox_' + tag"
-        @blur="validate(name)"
-        @keypress="validate(name)"
+        @blur="validate('tagList')"
+        @keypress="validate('tagList')"
       />
       <label class="form-check-label" :for="'tagCheckbox_' + tag">
         {{ tag }}
@@ -34,12 +35,46 @@ import { getAllTags } from "../services/tagsService";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 
 export default {
-  props: ["inputError", "validate", "name", "label"],
+  props: {
+    inputError: {
+      type: String,
+      default: null,
+    },
+    validate: {
+      type: Function,
+      default: null,
+    },
+    name: {
+      type: String,
+      default: null,
+    },
+    modelValue: {
+      type: [String, Array, Boolean],
+      default: null,
+    },
+    trueValue: {
+      type: [String, Boolean],
+      default: true,
+    },
+    falseValue: {
+      type: [String, Boolean],
+      default: false,
+    },
+  },
   data() {
     return {
       tagItems: [],
       isLoading: false,
     };
+  },
+  computed: {
+    isChecked() {
+      if (this.modelValue instanceof Array) {
+        return this.modelValue.includes(this.value);
+      }
+      // Note that `true-value` and `false-value` are camelCase in the JS
+      return this.modelValue === this.trueValue;
+    },
   },
   methods: {
     async getTags() {
@@ -48,13 +83,39 @@ export default {
         const data = await getAllTags();
         this.tagItems = data.tags;
         this.tagItems.sort((a, b) => a.localeCompare(b));
+        this.tagItems.forEach((tag) => {
+          if (
+            this.modelValue instanceof Array &&
+            this.modelValue.includes(tag)
+          ) {
+            this.$set(this.isChecked, tag, true);
+          } else if (this.modelValue === tag) {
+            this.$set(this.isChecked, tag, true);
+          } else {
+            this.$set(this.isChecked, tag, false);
+          }
+        });
       } catch (error) {
         console.log(error);
       } finally {
         this.isLoading = false;
       }
     },
-
+    updateInput(event, tag) {
+      const isChecked = event.target.checked;
+      if (this.modelValue instanceof Array) {
+        let newValue = [...this.modelValue];
+        if (isChecked) {
+          newValue.push(tag);
+        } else {
+          const index = newValue.indexOf(tag);
+          if (index > -1) {
+            newValue.splice(index, 1);
+          }
+        }
+        this.$emit("update:modelValue", newValue);
+      }
+    },
     validateField(field) {
       this.validate(field);
     },

@@ -97,7 +97,7 @@ const ArticleSchema = Yup.object().shape({
   title: Yup.string().required("Required field"),
   description: Yup.string().required("Required field"),
   body: Yup.string().required("Required field"),
-  tagList: Yup.array().of(Yup.string()).required("Required field"),
+  tagList: Yup.array().required("Required field"),
 });
 
 export default {
