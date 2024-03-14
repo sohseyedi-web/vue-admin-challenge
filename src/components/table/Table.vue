@@ -1,28 +1,30 @@
 <template>
   <div v-if="!isLoading">
     <!-- table -->
-    <table class="table">
-      <thead class="thead-light">
-        <tr>
-          <th
-            v-for="item in items"
-            :class="
-              item.label === 'Created' &&
-              'd-flex align-items-center justify-content-end'
-            "
-            :key="item.id"
-            :colspan="getColspan(item)"
-          >
-            {{ item.label }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(article, index) in paginatedData" :key="article.slug">
-          <TableBody :index="index" :article="article" />
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive" style="overflow-x: auto;">
+      <table class="table w-100">
+        <thead class="thead-light">
+          <tr>
+            <th
+              v-for="item in items"
+              :class="
+                item.label === 'Created' &&
+                'd-flex align-items-center justify-content-end'
+              "
+              :key="item.id"
+              :colspan="getColspan(item)"
+            >
+              {{ item.label }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(article, index) in paginatedData" :key="article.slug">
+            <TableBody :index="index" :article="article" />
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <!--pagination  -->
     <div class="mx-auto w-25">
       <nav aria-label="Page navigation example" class="w-100">
@@ -40,7 +42,9 @@
           </li>
           <li
             class="page-item"
-            :class="{ 'active text-warning': parseInt(this.$route.params.page) === page }"
+            :class="{
+              'active text-warning': parseInt(this.$route.params.page) === page,
+            }"
             v-for="page in visiblePages"
             :key="page"
           >
@@ -94,7 +98,10 @@ export default {
     async getAllArticle() {
       this.isLoading = true;
       try {
-        const data = await getArticles(this.itemsPerPage, this.$route.params.page);
+        const data = await getArticles(
+          this.itemsPerPage,
+          this.$route.params.page
+        );
         this.articles = data.articles;
         this.articleLen = data.articlesCount;
       } catch (error) {
@@ -110,7 +117,7 @@ export default {
       this.$router.push({ name: "Home", params: { page: page } });
     },
     previousPage() {
-      if (this.currentPage > 1) {
+      if (parseInt(this.$route.params.page) > 1) {
         this.$router.push({
           name: "Home",
           params: { page: parseInt(this.$route.params.page) - 1 },
@@ -118,14 +125,13 @@ export default {
       }
     },
     nextPage() {
-      if (this.currentPage < this.totalPages) {
+      if (parseInt(this.$route.params.page) < this.totalPages) {
         this.$router.push({
           name: "Home",
           params: { page: parseInt(this.$route.params.page) + 1 },
         });
       }
     },
-    
   },
   computed: {
     paginatedData() {
@@ -138,8 +144,8 @@ export default {
     },
     visiblePages() {
       const totalPages = this.totalPages;
-      let startPage = this.currentPage;
-      let endPage = this.currentPage + 3;
+      let startPage = parseInt(this.$route.params.page);
+      let endPage = parseInt(this.$route.params.page) + 3;
 
       if (endPage > totalPages) {
         endPage = totalPages;
@@ -179,6 +185,12 @@ export default {
 </script>
 
 <style>
+.customTable {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  overflow-x: auto;
+}
 th {
   color: #55595c;
   font-family: Helvetica;

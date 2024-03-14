@@ -1,10 +1,10 @@
 <template>
   <td>{{ index + 1 }}</td>
-  <td class="col-2">
+  <td >
     {{ truncateTextBody(article?.title) }}
   </td>
-  <td class="col-2">@{{ article?.author?.username }}</td>
-  <td class="col-1">
+  <td >@{{ article?.author?.username }}</td>
+  <td >
     <div class="dropdown">
       <button
         class="btn btn-secondary btn-sm dropdown-toggle"
@@ -23,9 +23,9 @@
       </div>
     </div>
   </td>
-  <td colspan="2" class="col-4">{{ truncateTextBody(article?.body) }}</td>
+  <td colspan="2" >{{ truncateTextBody(article?.body) }}</td>
 
-  <td colspan="1" class="d-flex align-items-center justify-content-end">
+  <td  class="d-flex align-items-center justify-content-end">
     <span class="mr-2">{{ toLocalDateString(article?.createdAt) }}</span>
     <div class="position-relative">
       <button @click="openModal" class="customDropDown btn btn-sm">
