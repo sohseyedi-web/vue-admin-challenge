@@ -4,23 +4,29 @@
     <input type="text" id="title" class="form-control" placeholder="New tag" />
   </div>
   <div class="customBoxTags" :class="inputError ? 'borderErr' : 'borderSucc'">
-    <div v-if="!isLoading" v-for="tag in tagItems" class="form-check">
+    <div v-if="!isLoading" v-for="(tag, index) in tagItems" class="form-check">
       <input
         class="form-check-input"
+        name="tagList"
         type="checkbox"
         :value="tag"
-        @change="addTags(tag)"
-        
+        @change="$emit(`update:modelValue[${index}]`, $event.target.value)"
         :id="'tagCheckbox_' + tag"
+        @blur="validate(name)"
+        @keypress="validate(name)"
       />
       <label class="form-check-label" :for="'tagCheckbox_' + tag">
         {{ tag }}
       </label>
     </div>
-    <span v-if="inputError" class="err position-absolute">{{
+    <span v-if="!!inputError" class="err position-absolute">{{
       inputError
     }}</span>
-    <pulse-loader :loading="isLoading" color="#1c7cd5" size=".5rem"></pulse-loader>
+    <pulse-loader
+      :loading="isLoading"
+      color="#1c7cd5"
+      size=".5rem"
+    ></pulse-loader>
   </div>
 </template>
 <script>
@@ -28,11 +34,10 @@ import { getAllTags } from "../services/tagsService";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 
 export default {
-  props: ["tagList",'inputError'],
+  props: ["inputError", "validate", "name", "label"],
   data() {
     return {
       tagItems: [],
-      prevTags: this.tagList,
       isLoading: false,
     };
   },
@@ -49,8 +54,9 @@ export default {
         this.isLoading = false;
       }
     },
-    addTags(tag) {
-      this.prevTags.push(tag);
+
+    validateField(field) {
+      this.validate(field);
     },
   },
 

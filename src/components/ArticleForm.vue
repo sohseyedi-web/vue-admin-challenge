@@ -9,29 +9,34 @@
         label="title"
         type="text"
         v-model="article.title"
-        :inputError="inputError"
+        :validate="validate"
+        :inputError="errors.title"
       />
       <TextField
         name="description"
         label="description"
         type="text"
         v-model="article.description"
-        :inputError="inputError"
+        :validate="validate"
+        :inputError="errors.description"
       />
       <div class="form-group text-left my-4 postion-relative">
-        <label for="body" :class="inputError ? 'err' : 'textInput'"
+        <label for="body" :class="errors.body ? 'err' : 'textInput'"
           >Body:</label
         >
         <textarea
           type="text"
           id="body"
+          name="body"
           class="form-control no-resize"
-          :class="inputError ? 'borderErr' : 'borderSucc'"
+          :class="errors.body ? 'borderErr' : 'borderSucc'"
           v-model="article.body"
           style="height: 225px; resize: none"
+          @blur="validate('body')"
+          @keypress="validate('body')"
         />
-        <span v-if="inputError" class="err position-absolute">{{
-          inputError
+        <span v-if="!!errors.body" class="err position-absolute">{{
+          errors.body
         }}</span>
       </div>
       <!-- show modal -->
@@ -40,15 +45,17 @@
         data-toggle="modal"
         data-target="#exampleModalCenter"
         style="cursor: pointer"
-        :class="inputError ? 'borderErr' : 'borderSucc'"
+        :class="errors.tagList ? 'borderErr' : 'borderSucc'"
       >
         Tags
       </div>
       <Modal>
         <Tags
+          name="tags"
           label="Tags"
-          :tag-list="article.tagList"
-          :inputError="inputError"
+          v-model="article.tagList"
+          :validate="validate"
+          :inputError="errors.tagList"
         />
       </Modal>
       <!-- end modal -->
@@ -63,7 +70,13 @@
       ></pulse-loader>
     </div>
     <div class="col-6 col-md-3 pt-1 d-none d-lg-block position-relative">
-      <Tags label="Tags" :tagList="article.tagList" :inputError="inputError" />
+      <Tags
+        label="Tags"
+        v-model="article.tagList"
+        name="tags"
+        :validate="validate"
+        :inputError="errors.tagList"
+      />
     </div>
   </form>
 </template>
@@ -77,6 +90,16 @@ import {
   getSingleArticleBySlug,
 } from "../services/articleService";
 import TextField from "./TextField.vue";
+import * as Yup from "yup";
+
+// validation schema
+const ArticleSchema = Yup.object().shape({
+  title: Yup.string().required("Required field"),
+  description: Yup.string().required("Required field"),
+  body: Yup.string().required("Required field"),
+  tagList: Yup.array().of(Yup.string()).required("Required field"),
+});
+
 export default {
   components: { Tags, Modal, PulseLoader, TextField },
   props: ["text"],
@@ -88,9 +111,14 @@ export default {
         body: "",
         tagList: [],
       },
+      errors: {
+        title: "",
+        description: "",
+        body: "",
+        tagList: [],
+      },
       slug: null,
       isLoading: false,
-      inputError: "",
     };
   },
   created() {
@@ -99,45 +127,50 @@ export default {
   },
   methods: {
     async submitForm() {
-      if (
-        this.article.title.length === 0 &&
-        this.article.description.length === 0 &&
-        this.article.body.length === 0 &&
-        this.article.tagList.length === 0
-      ) {
-        this.inputError = "Required field";
+      if (this.slug && this.article) {
+        this.isLoading = true;
+        try {
+          await ArticleSchema.validate(this.article, { abortEarly: false });
+          await editArticle({ article: this.article, slug: this.slug });
+          this.$router.push("/articles");
+        } catch (err) {
+          err.inner.forEach((error) => {
+            this.errors = { ...this.errors, [error.path]: error.message };
+          });
+          console.log(err);
+        } finally {
+          this.isLoading = false;
+        }
       } else {
-        if (this.slug && this.article) {
-          this.isLoading = true;
-          try {
-            await editArticle({ article: this.article, slug: this.slug });
-            this.$router.push("/articles");
-          } catch (error) {
-            console.log(error);
-          } finally {
-            this.isLoading = false;
-          }
-        } else {
-          this.isLoading = true;
+        this.isLoading = true;
 
-          try {
-            await createArticles({
-              article: this.article,
-            });
-            this.$router.push("/articles");
-          } catch (error) {
-            console.log(error);
-          } finally {
-            this.isLoading = false;
-          }
+        try {
+          await ArticleSchema.validate(this.article, { abortEarly: false });
+          await createArticles({
+            article: this.article,
+          });
+          this.$router.push("/articles");
+        } catch (err) {
+          err.inner.forEach((error) => {
+            this.errors = { ...this.errors, [error.path]: error.message };
+          });
+          console.log(err);
+        } finally {
+          this.isLoading = false;
         }
       }
+    },
+    validate(field) {
+      ArticleSchema.validateAt(field, this.article)
+        .then(() => (this.errors[field] = ""))
+        .catch((err) => {
+          this.errors[err.path] = err.message;
+        });
     },
     async getSingleArticle(slug) {
       try {
         const data = await getSingleArticleBySlug(slug);
         this.article = data.article;
-        console.log(data);
       } catch (error) {
         console.log(error);
       }
