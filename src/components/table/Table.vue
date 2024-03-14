@@ -31,8 +31,7 @@
             <a
               class="page-link"
               @click="previousPage"
-              :disabled="currentPage === 1"
-              href="#"
+              :disabled="parseInt(this.$route.params.page) === 1"
               aria-label="Previous"
             >
               <span aria-hidden="true">&#60;</span>
@@ -41,7 +40,7 @@
           </li>
           <li
             class="page-item"
-            :class="{ 'active text-warning': currentPage === page }"
+            :class="{ 'active text-warning': parseInt(this.$route.params.page) === page }"
             v-for="page in visiblePages"
             :key="page"
           >
@@ -50,10 +49,9 @@
           <li class="page-item">
             <a
               class="page-link"
-              href="#"
               aria-label="Next"
               @click="nextPage"
-              :disabled="currentPage === totalPages"
+              :disabled="parseInt(this.$route.params.page) === totalPages"
             >
               <span aria-hidden="true">&#62;</span>
               <span class="sr-only">Next</span>
@@ -87,7 +85,7 @@ export default {
       articles: [],
       articleLen: null,
       itemsPerPage: 10,
-      currentPage: 1,
+      currentPage: parseInt(this.$route.params.page),
       isLoading: false,
     };
   },
@@ -96,10 +94,7 @@ export default {
     async getAllArticle() {
       this.isLoading = true;
       try {
-        const data = await getArticles(
-          this.itemsPerPage,
-          this.$route.params.page
-        );
+        const data = await getArticles(this.itemsPerPage, this.$route.params.page);
         this.articles = data.articles;
         this.articleLen = data.articlesCount;
       } catch (error) {
@@ -116,23 +111,21 @@ export default {
     },
     previousPage() {
       if (this.currentPage > 1) {
-        this.currentPage--;
-
         this.$router.push({
           name: "Home",
-          params: { page: this.currentPage },
+          params: { page: parseInt(this.$route.params.page) - 1 },
         });
       }
     },
     nextPage() {
       if (this.currentPage < this.totalPages) {
-        this.currentPage++;
         this.$router.push({
           name: "Home",
-          params: { page: this.currentPage },
+          params: { page: parseInt(this.$route.params.page) + 1 },
         });
       }
     },
+    
   },
   computed: {
     paginatedData() {
@@ -146,11 +139,11 @@ export default {
     visiblePages() {
       const totalPages = this.totalPages;
       let startPage = this.currentPage;
-      let endPage = this.currentPage + 2;
+      let endPage = this.currentPage + 3;
 
       if (endPage > totalPages) {
         endPage = totalPages;
-        startPage = Math.max(endPage - 2, 1);
+        startPage = Math.max(endPage - 3, 1);
       }
 
       return Array(endPage - startPage + 1)
@@ -162,13 +155,22 @@ export default {
   watch: {
     "$route.params.page": {
       immediate: true,
-      handler(newValue,oldValue) {
+      handler(newValue, oldValue) {
+        if (newValue !== oldValue) {
+          this.getAllArticle();
+        }
+      },
+    },
+    currentPage: {
+      immediate: true,
+      handler(newValue, oldValue) {
         if (newValue !== oldValue) {
           this.getAllArticle();
         }
       },
     },
   },
+
   mounted() {
     this.getAllArticle();
   },

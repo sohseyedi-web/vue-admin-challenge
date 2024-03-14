@@ -10,14 +10,9 @@ const routes = [
       import(/*webpackChunkName:"home"*/ "../views/articles/AllArticles.vue"),
   },
   {
-    path: "/articles/page/1",
     alias: "/articles",
-    name: "HomeRedirect",
-    component: () =>
-      import(/*webpackChunkName:"home"*/ "../views/articles/AllArticles.vue"),
-    props: true,
+    path: "/articles/page/1",
   },
-
   {
     path: "/articles/create",
     name: "Create",
