@@ -1,10 +1,10 @@
 <template>
   <td>{{ index + 1 }}</td>
-  <td >
+  <td>
     {{ truncateTextBody(article?.title) }}
   </td>
-  <td >@{{ article?.author?.username }}</td>
-  <td >
+  <td>@{{ article?.author?.username }}</td>
+  <td>
     <div class="dropdown">
       <button
         class="btn btn-secondary btn-sm dropdown-toggle"
@@ -23,9 +23,9 @@
       </div>
     </div>
   </td>
-  <td colspan="2" >{{ truncateTextBody(article?.body) }}</td>
+  <td colspan="2">{{ truncateTextBody(article?.body) }}</td>
 
-  <td  class="d-flex align-items-center justify-content-end">
+  <td class="d-flex align-items-center justify-content-end">
     <span class="mr-2">{{ toLocalDateString(article?.createdAt) }}</span>
     <div class="position-relative">
       <button @click="openModal" class="customDropDown btn btn-sm">
@@ -60,7 +60,7 @@
         >
           Delete
         </div>
-        <Modal text="Delete Article">
+        <Modal text="Delete Article" >
           <p>Are you sure to delete Article?</p>
           <template v-slot:footer>
             <button type="button" class="btn btn-white" data-dismiss="modal">
@@ -68,10 +68,10 @@
             </button>
             <button
               @click="handleRemoveArticle(article?.slug)"
-              data-dismiss="modal"
               type="submit"
               class="btn btn-danger"
               v-if="!isLoading"
+              data-dismiss="modal"
             >
               Yes
             </button>
@@ -112,6 +112,7 @@ export default {
     openModal() {
       this.showDrop = !this.showDrop;
     },
+
     async handleRemoveArticle(value) {
       this.isLoading = true;
       try {
@@ -119,6 +120,8 @@ export default {
         this.$forceUpdate();
       } catch (error) {
         console.log(error);
+        this.$forceUpdate();
+
       } finally {
         this.isLoading = false;
       }

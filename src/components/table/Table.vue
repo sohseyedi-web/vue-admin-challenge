@@ -1,7 +1,7 @@
 <template>
   <div v-if="!isLoading">
     <!-- table -->
-    <div class="table-responsive" style="overflow-x: auto;">
+    <div class="table-responsive" style="overflow-x: auto">
       <table class="table w-100">
         <thead class="thead-light">
           <tr>
@@ -26,12 +26,13 @@
       </table>
     </div>
     <!--pagination  -->
-    <div class="mx-auto w-25">
+    <div class="mx-auto w-25" >
       <nav aria-label="Page navigation example" class="w-100">
         <ul class="pagination">
           <li class="page-item">
             <a
               class="page-link"
+              style="color: #373a3c;"
               @click="previousPage"
               :disabled="parseInt(this.$route.params.page) === 1"
               aria-label="Previous"
@@ -48,12 +49,13 @@
             v-for="page in visiblePages"
             :key="page"
           >
-            <a @click="changePage(page)" class="page-link">{{ page }}</a>
+            <a @click="changePage(page)" class="page-link" style="color: #373a3c;">{{ page }}</a>
           </li>
           <li class="page-item">
             <a
               class="page-link"
               aria-label="Next"
+              style="color: #373a3c;"
               @click="nextPage"
               :disabled="parseInt(this.$route.params.page) === totalPages"
             >
@@ -79,7 +81,6 @@
 import { tableHeadItems } from "../../constants/tableHead";
 import TableBody from "./TableBody.vue";
 import { getArticles } from "../../services/articleService";
-import Pagination from "./Pagination.vue";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 
 export default {
@@ -180,17 +181,11 @@ export default {
   mounted() {
     this.getAllArticle();
   },
-  components: { TableBody, Pagination, PulseLoader },
+  components: { TableBody, PulseLoader },
 };
 </script>
 
 <style>
-.customTable {
-  border-collapse: collapse;
-  border-spacing: 0;
-  width: 100%;
-  overflow-x: auto;
-}
 th {
   color: #55595c;
   font-family: Helvetica;

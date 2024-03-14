@@ -1,6 +1,6 @@
 import http from "./http";
 
-export function getArticles(limit, offset) {
+export function getArticles(limit, offset = 1) {
   return http
     .get(`/articles?limit=${limit}&offset=${offset}`)
     .then((res) => res.data);

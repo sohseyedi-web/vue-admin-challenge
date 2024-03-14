@@ -10,8 +10,8 @@ const routes = [
       import(/*webpackChunkName:"home"*/ "../views/articles/AllArticles.vue"),
   },
   {
-    alias: "/articles",
-    path: "/articles/page/1",
+    path: "/articles",
+    redirect: "/articles/page/1",
   },
   {
     path: "/articles/create",
