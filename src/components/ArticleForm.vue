@@ -45,7 +45,11 @@
         Tags
       </div>
       <Modal>
-        <Tags label="Tags" :tag-list="article.tagList" :inputError="inputError" />
+        <Tags
+          label="Tags"
+          :tag-list="article.tagList"
+          :inputError="inputError"
+        />
       </Modal>
       <!-- end modal -->
       <button type="submit" class="customBtn py-2 text-white" v-if="!isLoading">

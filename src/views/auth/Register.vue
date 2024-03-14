@@ -2,30 +2,40 @@
   <section
     class="container d-flex align-items-center justify-content-center vh-100"
   >
+  <!-- form groups -->
     <form @submit.prevent="submitForm" class="custom-box">
       <h3 class="title text-center">REGISTER</h3>
+      <!-- username input -->
       <TextField
         name="username"
         label="username"
         type="text"
         v-model="user.username"
-        :inputError="inputError"
+        :inputError="errors.username"
+        :validate="validate"
       />
+      <!-- email input -->
+
       <TextField
         name="email"
         label="email"
         type="email"
         v-model="user.email"
-        :inputError="inputError"
+        :validate="validate"
+        :inputError="errors.email"
       />
+      <!-- password input -->
       <TextField
         name="password"
         label="password"
         type="password"
+        :validate="validate"
         v-model="user.password"
-        :inputError="inputError"
+        :inputError="errors.password"
       />
+      <!-- button -->
       <ButtonFormVue text="Register" v-if="!isLoading" />
+      <!-- loading icon -->
       <pulse-loader
         v-else="isLoading"
         class="btn btn-primary w-100 py-2 text-center d-flex align-items-center justify-content-center"
@@ -48,7 +58,14 @@ import { registerUser } from "../../services/authServices";
 import ButtonFormVue from "../../components/ButtonForm.vue";
 import TextField from "../../components/TextField.vue";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
+import * as Yup from "yup";
 
+// schema validation
+const ArticleSchema = Yup.object().shape({
+  username: Yup.string().required("Required field"),
+  email: Yup.string().required("Required field").email("Email not correct"),
+  password: Yup.string().required("Required field"),
+});
 export default {
   data() {
     return {
@@ -57,34 +74,46 @@ export default {
         email: "",
         password: "",
       },
+      errors: {
+        username: "",
+        email: "",
+        password: "",
+      },
       isLoading: false,
-      inputError: "",
       text: "Register",
+      succNotify: false,
+      errNotify: false,
     };
   },
   methods: {
+    // function form
     async submitForm() {
-      if (
-        this.user.email.length === 0 &&
-        this.user.password.length === 0 &&
-        this.user.username.length === 0
-      ) {
-        this.inputError = "Required field";
-      } else {
-        this.isLoading = true;
-        try {
-          const data = await registerUser({
-            user: this.user,
-          });
-          this.notifySuccess = true;
-          localStorage.setItem("accessToken", data?.user?.token);
-          this.$router.push("/");
-        } catch (error) {
-          console.log(error);
-        } finally {
-          this.isLoading = false;
-        }
+      this.isLoading = true;
+      try {
+        await ArticleSchema.validate(this.user, { abortEarly: false });
+
+        const data = await registerUser({
+          user: this.user,
+        });
+        this.succNotify = true;
+        localStorage.setItem("accessToken", data?.user?.token);
+        this.$router.push("/articles");
+      } catch (err) {
+        err.inner.forEach((error) => {
+          this.errors = { ...this.errors, [error.path]: error.message };
+        });
+        console.log(err);
+        this.errNotify = true;
+      } finally {
+        this.isLoading = false;
       }
+    },
+    validate(field) {
+      ArticleSchema.validateAt(field, this.user)
+        .then(() => (this.errors[field] = ""))
+        .catch((err) => {
+          this.errors[err.path] = err.message;
+        });
     },
   },
   components: {
