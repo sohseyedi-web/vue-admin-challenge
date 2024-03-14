@@ -1,5 +1,12 @@
 <template>
-  <td>{{ index + 1 }}</td>
+  <td>
+    <Alert v-if="succNotify" :correct="true">
+      <strong>Well Done!</strong> Article Deleted Succesfully.
+    </Alert>
+
+    <Alert v-if="errNotify" :correct="false"> {{ errNotify }}. </Alert>
+    {{ index + 1 }}
+  </td>
   <td>
     {{ truncateTextBody(article?.title) }}
   </td>
@@ -60,7 +67,7 @@
         >
           Delete
         </div>
-        <Modal text="Delete Article" >
+        <Modal text="Delete Article">
           <p>Are you sure to delete Article?</p>
           <template v-slot:footer>
             <button type="button" class="btn btn-white" data-dismiss="modal">
@@ -93,6 +100,7 @@ import { toLocalDate } from "../../utils/toLocalDate";
 import Modal from "../Modal.vue";
 import { deleteArticle } from "../../services/articleService";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
+import Alert from "../Alert.vue";
 
 export default {
   props: ["index", "article"],
@@ -100,6 +108,8 @@ export default {
     return {
       showDrop: false,
       isLoading: false,
+      succNotify: null,
+      errNotify: null,
     };
   },
   methods: {
@@ -116,18 +126,20 @@ export default {
     async handleRemoveArticle(value) {
       this.isLoading = true;
       try {
-        await deleteArticle(value);
+        const data = await deleteArticle(value);
+        console.log(data);
+        this.succNotify = true;
         this.$forceUpdate();
       } catch (error) {
         console.log(error);
+        this.errNotify = error?.response?.data?.message;
         this.$forceUpdate();
-
       } finally {
         this.isLoading = false;
       }
     },
   },
-  components: { Modal, PulseLoader },
+  components: { Modal, PulseLoader, Alert },
 };
 </script>
 <style>

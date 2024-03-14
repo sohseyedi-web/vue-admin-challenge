@@ -2,7 +2,14 @@
   <section
     class="container d-flex align-items-center justify-content-center vh-100"
   >
-  <!-- form groups -->
+    <!-- form groups -->
+    <Alert v-if="succNotify" :correct="true">
+      <strong>Login Done!</strong> Hello {{ user.email }}.
+    </Alert>
+    
+    <Alert v-if="errMessage" :correct="false">
+      <strong>Login Failed!</strong> Username and password {{ errMessage }}.
+    </Alert>
     <form @submit.prevent="submitForm" class="custom-box">
       <h3 class="title text-center">LOGIN</h3>
       <!-- email input -->
@@ -52,6 +59,7 @@ import TextField from "../../components/TextField.vue";
 import { loginUser } from "../../services/authServices";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 import * as Yup from "yup";
+import Alert from "../../components/Alert.vue";
 // validation schema
 const ArticleSchema = Yup.object().shape({
   email: Yup.string().required("Required field").email("Email not correct"),
@@ -72,6 +80,7 @@ export default {
       text: "Login",
       succNotify: false,
       errNotify: false,
+      errMessage: null,
     };
   },
   methods: {
@@ -91,8 +100,7 @@ export default {
         err.inner.forEach((error) => {
           this.errors = { ...this.errors, [error.path]: error.message };
         });
-        console.log(err);
-        this.errNotify = true;
+        this.errMessage = err.response.data.errors["email or password"][0];
       } finally {
         this.isLoading = false;
       }
@@ -109,6 +117,7 @@ export default {
     ButtonFormVue,
     TextField,
     PulseLoader,
+    Alert,
   },
 };
 </script>

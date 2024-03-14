@@ -2,7 +2,14 @@
   <section
     class="container d-flex align-items-center justify-content-center vh-100"
   >
-  <!-- form groups -->
+    <!-- form groups -->
+    <Alert v-if="succNotify" :correct="true">
+      <strong>Register Done!</strong> Hello {{ user.email }}.
+    </Alert>
+
+    <Alert v-if="errMessage" :correct="false">
+      <strong>Register Failed!</strong> 
+    </Alert>
     <form @submit.prevent="submitForm" class="custom-box">
       <h3 class="title text-center">REGISTER</h3>
       <!-- username input -->
@@ -59,6 +66,7 @@ import ButtonFormVue from "../../components/ButtonForm.vue";
 import TextField from "../../components/TextField.vue";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 import * as Yup from "yup";
+import Alert from "../../components/Alert.vue";
 
 // schema validation
 const ArticleSchema = Yup.object().shape({
@@ -102,8 +110,8 @@ export default {
         err.inner.forEach((error) => {
           this.errors = { ...this.errors, [error.path]: error.message };
         });
-        console.log(err);
         this.errNotify = true;
+        console.log(err);
       } finally {
         this.isLoading = false;
       }
@@ -120,7 +128,8 @@ export default {
     ButtonFormVue,
     TextField,
     PulseLoader,
-  },
+    Alert
+},
 };
 </script>
 
