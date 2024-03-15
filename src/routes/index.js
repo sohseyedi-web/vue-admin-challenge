@@ -16,6 +16,7 @@ const routes = [
     component: () =>
       import(/*webpackChunkName:"home"*/ "../views/articles/AllArticles.vue"),
   },
+
   {
     path: "/articles",
     redirect: "/articles/page/1",

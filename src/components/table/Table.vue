@@ -3,6 +3,7 @@
     <!-- table -->
     <div class="table-responsive" style="overflow-x: auto">
       <table class="table w-100">
+        <!-- table head -->
         <thead class="thead-light">
           <tr>
             <th
@@ -18,6 +19,7 @@
             </th>
           </tr>
         </thead>
+        <!-- table body -->
         <tbody>
           <tr v-for="(article, index) in paginatedData" :key="article.slug">
             <TableBody :index="index" :article="article" />
@@ -114,6 +116,7 @@ export default {
     getColspan(item) {
       return item.label === "Excerpt" ? "2" : "1";
     },
+    // change page with pagination functions
     changePage(page) {
       this.$router.push({ name: "Home", params: { page: page } });
     },
@@ -135,6 +138,7 @@ export default {
     },
   },
   computed: {
+    // data pages
     paginatedData() {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
       const endIndex = startIndex + this.itemsPerPage;
@@ -159,6 +163,7 @@ export default {
     },
   },
 
+  // for change page and loading data
   watch: {
     "$route.params.page": {
       immediate: true,

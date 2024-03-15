@@ -8,7 +8,7 @@
     </Alert>
 
     <Alert v-if="errMessage" :correct="false">
-      <strong>Register Failed!</strong> 
+      <strong>Register Failed!</strong>
     </Alert>
     <form @submit.prevent="submitForm" class="custom-box">
       <h3 class="title text-center">REGISTER</h3>
@@ -128,8 +128,8 @@ export default {
     ButtonFormVue,
     TextField,
     PulseLoader,
-    Alert
-},
+    Alert,
+  },
 };
 </script>
 

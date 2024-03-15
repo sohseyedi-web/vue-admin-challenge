@@ -2,7 +2,7 @@
     <Back :active="active" :onUpdate="onUpdate"/>
     <aside :class="active ? 'sidebar' : 'sidebar-deactive' ">
       <h4 class="px-3 text-white">Post</h4>
-      
+      <!-- router link -->
       <ul class="w-100">
         <li>
           <router-link

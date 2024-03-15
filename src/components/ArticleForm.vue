@@ -1,4 +1,5 @@
 <template>
+  <!-- alerts -->
   <Alert v-if="succNotifyEdit" :correct="true">
     <strong>Well Done!</strong> Article updated successfuly
   </Alert>
@@ -15,9 +16,11 @@
     <strong>Create Failed!</strong>
 
   </Alert>
+  <!-- login code -->
   <header class="d-flex align-items-center justify-content-between mb-3">
     <h3 class="title">{{ text }}</h3>
   </header>
+  <!-- form groups -->
   <form class="row" @submit.prevent="submitForm">
     <div action="" class="col-12 col-md-9">
       <TextField
@@ -55,7 +58,7 @@
           errors.body
         }}</span>
       </div>
-      <!-- show modal -->
+      <!-- show modal for responsive page -->
       <div
         class="w-100 form-control d-lg-none pointer my-3 position-relative"
         data-toggle="modal"
@@ -78,6 +81,7 @@
       <button type="submit" class="customBtn py-2 text-white" v-if="!isLoading">
         Submit
       </button>
+      <!-- loading icon -->
       <pulse-loader
         class="customBtn py-2 text-center"
         :loading="isLoading"
@@ -85,6 +89,7 @@
         size=".5rem"
       ></pulse-loader>
     </div>
+    <!-- show tags as lg page -->
     <div class="col-6 col-md-3 pt-1 d-none d-lg-block position-relative">
       <Tags
         label="Tags"
@@ -147,8 +152,10 @@ export default {
     this.getSingleArticle(this.slug);
   },
   methods: {
-    async submitForm() {
+    // submiting form
+      async submitForm() {
       if (this.slug && this.article) {
+        // edit articles function
         this.isLoading = true;
         try {
           await ArticleSchema.validate(this.article, { abortEarly: false });
@@ -168,7 +175,7 @@ export default {
         }
       } else {
         this.isLoading = true;
-
+        // create  articles function
         try {
           await ArticleSchema.validate(this.article, { abortEarly: false });
           await createArticles({

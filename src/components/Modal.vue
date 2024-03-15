@@ -19,6 +19,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
+        <!-- slot -->
         <div class="modal-body">
           <slot></slot>
         </div>

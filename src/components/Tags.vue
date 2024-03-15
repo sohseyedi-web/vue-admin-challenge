@@ -4,6 +4,7 @@
     <input type="text" id="title" class="form-control" placeholder="New tag" />
   </div>
   <div class="customBoxTags" :class="inputError ? 'borderErr' : 'borderSucc'">
+    <!-- loops tags -->
     <div v-if="!isLoading" v-for="(tag, index) in tagItems" class="form-check">
       <input
         class="form-check-input"
@@ -77,6 +78,7 @@ export default {
     },
   },
   methods: {
+    // fetch tags in database
     async getTags() {
       this.isLoading = true;
       try {
@@ -101,6 +103,7 @@ export default {
         this.isLoading = false;
       }
     },
+    // adding tags to array taglist
     updateInput(event, tag) {
       const isChecked = event.target.checked;
       if (this.modelValue instanceof Array) {
@@ -121,6 +124,7 @@ export default {
     },
   },
 
+  // mounted tags
   mounted() {
     this.getTags();
   },

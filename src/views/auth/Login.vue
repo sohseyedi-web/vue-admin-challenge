@@ -6,7 +6,7 @@
     <Alert v-if="succNotify" :correct="true">
       <strong>Login Done!</strong> Hello {{ user.email }}.
     </Alert>
-    
+
     <Alert v-if="errMessage" :correct="false">
       <strong>Login Failed!</strong> Username and password {{ errMessage }}.
     </Alert>
