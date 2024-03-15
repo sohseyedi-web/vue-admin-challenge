@@ -1,4 +1,20 @@
 <template>
+  <Alert v-if="succNotifyEdit" :correct="true">
+    <strong>Well Done!</strong> Article updated successfuly
+  </Alert>
+
+  <Alert v-if="succNotifyCreate" :correct="true">
+    <strong>Well Done!</strong> Article created successfuly
+
+  </Alert>
+  <Alert v-if="errNotifyEdit" :correct="false">
+    <strong>Edit Failed!</strong>
+  </Alert>
+
+  <Alert v-if="errNotifyCreate" :correct="false">
+    <strong>Create Failed!</strong>
+
+  </Alert>
   <header class="d-flex align-items-center justify-content-between mb-3">
     <h3 class="title">{{ text }}</h3>
   </header>
@@ -91,6 +107,7 @@ import {
 } from "../services/articleService";
 import TextField from "./TextField.vue";
 import * as Yup from "yup";
+import Alert from "./Alert.vue";
 
 // validation schema
 const ArticleSchema = Yup.object().shape({
@@ -101,7 +118,7 @@ const ArticleSchema = Yup.object().shape({
 });
 
 export default {
-  components: { Tags, Modal, PulseLoader, TextField },
+  components: { Tags, Modal, PulseLoader, TextField, Alert },
   props: ["text"],
   data() {
     return {
@@ -119,6 +136,10 @@ export default {
       },
       slug: null,
       isLoading: false,
+      succNotifyCreate: false,
+      errNotifyCreate: false,
+      succNotifyEdit: false,
+      errNotifyEdit: false,
     };
   },
   created() {
@@ -132,12 +153,16 @@ export default {
         try {
           await ArticleSchema.validate(this.article, { abortEarly: false });
           await editArticle({ article: this.article, slug: this.slug });
+          this.succNotifyEdit = true;
+
           this.$router.push("/articles");
         } catch (err) {
           err.inner.forEach((error) => {
             this.errors = { ...this.errors, [error.path]: error.message };
           });
           console.log(err);
+          this.errNotifyEdit = true;
+
         } finally {
           this.isLoading = false;
         }
@@ -149,12 +174,16 @@ export default {
           await createArticles({
             article: this.article,
           });
+          this.succNotifyCreate = true;
+
           this.$router.push("/articles");
         } catch (err) {
           err.inner.forEach((error) => {
             this.errors = { ...this.errors, [error.path]: error.message };
           });
           console.log(err);
+          this.errNotifyCreate = true;
+
         } finally {
           this.isLoading = false;
         }
