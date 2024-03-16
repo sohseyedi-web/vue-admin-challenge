@@ -219,6 +219,12 @@ export default {
   font-size: 2.5rem;
   color: #000;
 }
+@media screen and (max-width: 1024px) {
+  .title {
+   font-size: 1.3rem;
+
+  }
+}
 
 .customBtn {
   width: 99px;
